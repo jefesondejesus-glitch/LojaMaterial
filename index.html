@@ -1,14 +1,77 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head><meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase v2 - Exemplo</title>
+</head>
+<body>
+  <h1>Teste Supabase v2</h1>
+  <button id="btn">Buscar dados</button>
+  <pre id="out"></pre>
+
+  <!-- ✅ Supabase v2 via ESM CDN (forma recomendada em HTML puro) -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // ⚠️ Substitua pelas SUAS credenciais
+    const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
+    const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON';
+
+    // ✅ Inicialização correta do v2
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Expor globalmente se necessário (para uso em outros scripts não-module)
+    window.supabase = supabase;
+
+    document.getElementById('btn').addEventListener('click', async () => {
+      // ✅ Sintaxe v2: .select() sempre antes de filtros
+      const { data, error } = await supabase
+        .from('sua_tabela')
+        .select('*');
+
+      if (error) {
+        console.error('Erro:', error);
+        document.getElementById('out').textContent = JSON.stringify(error, null, 2);
+        return;
+      }
+      document.getElementById('out').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
+⚠️ Erros comuns do Supabase v1 → v2 que costumo ver:
+v1 (errado no v2)	v2 (correto)
+supabase.auth.session()	supabase.auth.getSession()
+supabase.auth.user()	supabase.auth.getUser()
+supabase.from('t').select('*').eq(...) retornando direto	Agora sempre retorna { data, error }
+supabase.auth.onAuthStateChange((event, session) => ...)	Igual, mas session pode ser null — trate
+insert([{...}]) sem .select()	Use .insert([...]).select() se quiser retorno
+Variável global supabase sobrescrevendo a lib	Use outro nome, ex: sb ou supabaseClient
+CDN v1: https://cdn.jsdelivr.net/npm/@supabase/supabase-js	v2 ESM: https://esm.sh/@supabase/supabase-js@2
+📌 Cole seu código HTML completo e eu devolvo ele 100% corrigido, com destaque nas mudanças feitas.
+
+Analisei todo o código e encontrei vários erros críticos, incluindo duplicações de funções, variáveis não declaradas, e uma inicialização do Supabase totalmente incorreta. Aqui está o arquivo corrigido e funcional:
+
+html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>V8 Construcoes — Depósito & Catálogo de Materiais de Construção</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+
+<!-- ✅ Supabase v2 via ESM CDN (forma correta e recomendada) -->
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
   const supabaseUrl = 'https://efpvtizxvplqoehohstc.supabase.co';
   const supabaseKey = 'sb_publishable_X2lciUJy5MdDOrTafCzwIg_zVfZ4MpF';
-  const supabaseClient=supabase.createClient=(supabaseUrl,supabaseKey);
+
+  // ✅ Sintaxe correta: createClient(url, key)
+  window.supabaseClient = createClient(supabaseUrl, supabaseKey);
+  window.supabaseReady = true;
+  window.dispatchEvent(new Event('supabase-ready'));
 </script>
 
 <style>
@@ -36,7 +99,6 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 input, select, textarea { font-family: inherit; font-size: 1rem; }
 a { text-decoration: none; color: inherit; }
 
-/* REUTILIZÁVEIS */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 22px; font-weight: 700; border-radius: 8px; transition: all .2s ease; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; }
 .btn-whats { background: var(--verde-whatsapp); color: #fff; }
@@ -52,7 +114,6 @@ a { text-decoration: none; color: inherit; }
 .badge-promo { background: var(--vermelho); color: #fff; }
 .badge-pix { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; font-weight: 700; }
 
-/* HEADER */
 .header { background: var(--grafite); color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
 .header-in { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; flex-wrap: wrap; }
 .logo-box { display: flex; align-items: center; gap: 12px; cursor: pointer; }
@@ -68,22 +129,18 @@ a { text-decoration: none; color: inherit; }
 .btn-header-lista { position: relative; background: var(--grafite-claro); color: #fff; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
 .badge-count { background: var(--amarelo); color: var(--grafite); font-size: 0.8rem; font-weight: 900; border-radius: 50%; width: 24px; height: 24px; display: grid; place-items: center; }
 
-/* HERO */
 .hero { background: #fff; border-bottom: 1px solid var(--cinza-borda); padding: 28px 0; }
 .hero-box { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
 .hero-title { font-size: 1.85rem; font-weight: 900; color: var(--grafite); line-height: 1.25; }
 .hero-sub { font-size: 1.05rem; color: var(--cinza-texto); max-width: 680px; line-height: 1.5; }
 .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; margin-top: 6px; }
 
-/* BANNER DESTAQUE FIXO WHATSAPP */
 .bar-whats-hero { width: 100%; background: #E8F5E9; border: 1.5px dashed var(--verde-whatsapp); border-radius: var(--raio); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .bar-whats-hero span { font-weight: 700; color: #1B5E20; font-size: 0.98rem; }
 
-/* SEÇÕES */
 .secao { margin-top: 28px; }
 .secao-titulo { font-size: 1.35rem; font-weight: 800; color: var(--grafite); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
-/* PROMOÇÕES DA SEMANA - CARROSSEL MOBILE / GRID DESKTOP */
 .promos-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .promos-scroll::-webkit-scrollbar { display: none; }
 .card-promo { flex: 0 0 290px; scroll-snap-align: start; background: #fff; border-radius: var(--raio); border: 2px solid #FFCDD2; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--sombra); }
@@ -97,44 +154,17 @@ a { text-decoration: none; color: inherit; }
 .preco-atual { font-size: 1.75rem; font-weight: 900; color: var(--vermelho); }
 .preco-pix { font-size: 1rem; font-weight: 700; color: #1B5E20; }
 
-/* CATEGORIAS */
 .cats-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
 .cats-list::-webkit-scrollbar { display: none; }
 .cat-chip { flex: 0 0 auto; background: #fff; border: 1px solid var(--cinza-borda); padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 0.92rem; color: var(--grafite); cursor: pointer; }
 .cat-chip.ativa { background: var(--grafite); color: var(--amarelo); border-color: var(--grafite); }
 
-/* ============================================================
-   GRID PRODUTOS — MENOR E LADO A LADO
-   ============================================================ */
-.grid-produtos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 8px;
-}
+.grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
 .card-prod { background: #fff; border-radius: var(--raio); border: 1px solid var(--cinza-borda); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--sombra); }
 
-/* IMAGEM DO PRODUTO — MENOR */
-.card-prod-img {
-  width: 100%;
-  height: 110px;
-  background: #f9f9f9;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.card-prod-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  transition: transform .3s ease;
-}
-.card-prod-img:hover img {
-  transform: scale(1.05);
-}
+.card-prod-img { width: 100%; height: 110px; background: #f9f9f9; position: relative; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.card-prod-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
+.card-prod-img:hover img { transform: scale(1.05); }
 
 .card-prod-body { padding: 7px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .prod-marca { font-size: 0.62rem; text-transform: uppercase; font-weight: 700; color: var(--cinza-texto); }
@@ -146,18 +176,15 @@ a { text-decoration: none; color: inherit; }
 .prod-qtd-row { display: flex; align-items: center; gap: 4px; margin-top: auto; padding-top: 6px; }
 .input-qtd { width: 34px; padding: 4px 2px; border: 1px solid var(--cinza-borda); border-radius: 5px; text-align: center; font-weight: 800; font-size: 0.72rem; }
 
-/* INFORMAÇÕES LOJA */
 .info-deposito { background: #fff; border-radius: var(--raio); border: 1px solid var(--cinza-borda); padding: 20px; margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; font-size: 0.95rem; }
 .info-item { display: flex; gap: 14px; align-items: flex-start; }
 .info-icon { background: var(--cinza-fundo); width: 44px; height: 44px; border-radius: 8px; display: grid; place-items: center; font-size: 1.3rem; flex-shrink: 0; }
 
-/* MODAL DE FOTO (EXPANDIDA) */
 .modal-foto { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; display: none; place-items: center; padding: 20px; }
 .modal-foto.aberto { display: grid; }
 .modal-foto img { max-width: 90vw; max-height: 80vh; border-radius: 8px; object-fit: contain; }
 .modal-fechar { position: absolute; top: 20px; right: 20px; background: #fff; color: #000; border-radius: 50%; width: 44px; height: 44px; font-weight: 900; font-size: 1.3rem; display: grid; place-items: center; cursor: pointer; }
 
-/* GAVETA LISTA DE ORÇAMENTO */
 .fundo-gaveta { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; }
 .fundo-gaveta.aberto { display: block; }
 .gaveta-lista { position: fixed; top: 0; right: 0; height: 100%; width: min(450px, 100%); background: #fff; z-index: 160; transform: translateX(105%); transition: transform .25s ease; display: flex; flex-direction: column; }
@@ -171,7 +198,6 @@ a { text-decoration: none; color: inherit; }
 .gaveta-rodape { background: var(--cinza-fundo); padding: 18px; border-top: 1px solid var(--cinza-borda); display: flex; flex-direction: column; gap: 12px; }
 .total-box { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 900; }
 
-/* ASSISTENTE DE OBRA - BOTÃO FAB E CHAT */
 .chat-fab { position: fixed; bottom: 85px; right: 16px; z-index: 90; background: var(--grafite); color: var(--amarelo); padding: 12px 18px; border-radius: 30px; font-weight: 900; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); border: 2px solid var(--amarelo); }
 .chat-janela { position: fixed; bottom: 85px; right: 16px; z-index: 140; width: min(400px, calc(100vw - 32px)); height: min(560px, calc(100vh - 110px)); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--cinza-borda); }
 .chat-janela.aberto { display: flex; }
@@ -185,11 +211,9 @@ a { text-decoration: none; color: inherit; }
 .chat-rodape { padding: 12px; background: #fff; border-top: 1px solid var(--cinza-borda); display: flex; gap: 8px; }
 .chat-rodape input { flex: 1; border: 1px solid var(--cinza-borda); border-radius: 20px; padding: 10px 16px; outline: none; font-size: 0.92rem; }
 
-/* BARRA FIXA MOBILE */
 .bar-fixa-mobile { position: fixed; bottom: 0; left: 0; right: 0; background: var(--grafite); padding: 12px 16px; z-index: 80; display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid var(--grafite-claro); }
 .bar-fixa-mobile .btn { flex: 1; padding: 12px; font-size: 0.85rem; }
 
-/* ADMIN */
 #adminView { display: none; min-height: 100vh; background: var(--cinza-fundo); padding-bottom: 40px; }
 #adminView.aberto { display: block; }
 .login-box { max-width: 380px; margin: 10vh auto; background: #fff; border-radius: var(--raio); padding: 28px; box-shadow: var(--sombra); border: 1px solid var(--cinza-borda); }
@@ -205,11 +229,9 @@ a { text-decoration: none; color: inherit; }
 .tabela-adm { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 12px; }
 .tabela-adm th, .tabela-adm td { text-align: left; padding: 10px; border-bottom: 1px solid var(--cinza-borda); }
 
-/* TOAST NOTIFICAÇÃO */
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--grafite); color: #fff; padding: 12px 24px; border-radius: 20px; font-weight: 700; font-size: 0.92rem; z-index: 400; opacity: 0; pointer-events: none; transition: opacity .2s ease; border: 1px solid var(--amarelo); }
 .toast.mostra { opacity: 1; }
 
-/* AJUSTES MOBILE */
 .header-in { justify-content: center; }
 .logo-box { order: 1; }
 .header-actions { order: 2; margin-left: auto; }
@@ -218,7 +240,6 @@ a { text-decoration: none; color: inherit; }
 .card-promo-img { height: 200px; }
 .card-prod-img { height: 110px; }
 
-/* CARROSSEL DE IMAGENS DAS OFERTAS */
 .carrossel-oferta { position: relative; width: 100%; height: 100%; }
 .carrossel-oferta img { transition: opacity .4s ease; }
 .dots-oferta { position: absolute; bottom: 6px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; z-index: 2; }
@@ -247,9 +268,7 @@ a { text-decoration: none; color: inherit; }
 </head>
 <body>
 
-<!-- VISÃO DA LOJA / CATÁLOGO -->
 <div id="lojaView">
-  <!-- HEADER -->
   <header class="header">
     <div class="container header-in">
       <div class="logo-box" onclick="irParaTopo()">
@@ -276,7 +295,6 @@ a { text-decoration: none; color: inherit; }
     </div>
   </header>
 
-  <!-- HERO / PRIMEIRA TELA -->
   <section class="hero">
     <div class="container hero-box">
       <h2 class="hero-title">Tudo para sua obra em um só lugar.</h2>
@@ -295,22 +313,17 @@ a { text-decoration: none; color: inherit; }
     </div>
   </section>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <main class="container">
-
-    <!-- OFERTAS DA SEMANA -->
     <section class="secao">
       <div class="secao-titulo">🔥 Ofertas da Semana</div>
       <div class="promos-scroll" id="containerPromos"></div>
     </section>
 
-    <!-- CATEGORIAS -->
     <section class="secao" id="secCatalogo">
       <div class="secao-titulo">📂 Encontre o material para sua obra</div>
       <div class="cats-list" id="containerCats"></div>
     </section>
 
-    <!-- PRODUTOS -->
     <section class="secao">
       <div class="secao-titulo">
         🧱 Catálogo de Produtos
@@ -319,12 +332,9 @@ a { text-decoration: none; color: inherit; }
       <div class="grid-produtos" id="gridProdutos"></div>
     </section>
 
-    <!-- INFORMAÇÕES DO DEPÓSITO -->
     <section class="info-deposito" id="infoDeposito"></section>
-
   </main>
 
-  <!-- BARRA FIXA MOBILE -->
   <div class="bar-fixa-mobile">
     <button class="btn btn-dark" onclick="abrirGavetaLista()">
       📋 Lista (<span id="countBarMobile">0</span>)
@@ -340,7 +350,6 @@ a { text-decoration: none; color: inherit; }
   </footer>
 </div>
 
-<!-- GAVETA MINHA LISTA DE ORÇAMENTO -->
 <div class="fundo-gaveta" id="fundoGaveta" onclick="fecharGavetaLista()"></div>
 <aside class="gaveta-lista" id="gavetaLista">
   <div class="gaveta-topo">
@@ -359,7 +368,6 @@ a { text-decoration: none; color: inherit; }
   </div>
 </aside>
 
-<!-- ASSISTENTE DE OBRA (CHAT) -->
 <button class="chat-fab" onclick="toggleChat()">🤖 Assistente de Obra</button>
 <div class="chat-janela" id="chatJanela">
   <div class="chat-topo">
@@ -390,13 +398,11 @@ a { text-decoration: none; color: inherit; }
   </div>
 </div>
 
-<!-- MODAL AMPLIAR FOTO -->
 <div class="modal-foto" id="modalFoto" onclick="fecharModalFoto()">
   <div class="modal-fechar">✕</div>
   <img id="imgModalExpandida" src="" alt="Imagem Ampliada">
 </div>
 
-<!-- PAINEL ADMINISTRATIVO -->
 <div id="adminView">
   <div id="admLoginView">
     <div class="login-box">
@@ -430,13 +436,15 @@ a { text-decoration: none; color: inherit; }
 
 <script>
 /* ==========================================================================
-   BANCO DE DADOS & ESTADO INICIAL
+   CONSTANTES E ESTADO GLOBAL
    ========================================================================== */
 const DB_KEY = 'casaobra_deposito_db_v2';
-
- MINHA_LISTA = {};
-
 const LISTA_KEY = 'casaobra_minha_lista_v1';
+const ADMIN_SENHA = 'v8admin'; // 🔐 Troque pela senha desejada
+
+// ⚠️ Estado global declarado corretamente (antes estava faltando o 'let')
+let DB = { loja: {}, categorias: [], ofertas: [], produtos: [] };
+let MINHA_LISTA = {};
 let catSelecionada = 'todas';
 let adminAbaAtiva = 'produtos';
 
@@ -557,12 +565,14 @@ function seedDB() {
   };
 }
 
-function carregarDB() {
+function carregarDBLocal() {
   try {
     const data = localStorage.getItem(DB_KEY);
     if (data) {
       DB = JSON.parse(data);
       if (!DB.ofertas) DB.ofertas = [];
+      if (!DB.produtos) DB.produtos = [];
+      if (!DB.categorias) DB.categorias = seedDB().categorias;
     } else {
       DB = seedDB();
       salvarDB();
@@ -596,29 +606,97 @@ function toast(msg) {
 }
 
 /* ==========================================================================
+   SUPABASE v2 — Carregamento e salvamento remoto
+   ========================================================================== */
+async function carregarDB() {
+  // Carrega primeiro do localStorage para não ficar em branco
+  carregarDBLocal();
+  renderizarLoja();
+
+  // Depois tenta sincronizar com o Supabase v2
+  if (!window.supabaseClient) {
+    console.warn('Supabase ainda não inicializado.');
+    return;
+  }
+
+  try {
+    // ✅ Sintaxe v2: sempre retorna { data, error }
+    const { data, error } = await window.supabaseClient
+      .from('produtos')
+      .select('*');
+
+    if (error) {
+      console.error('Erro ao buscar produtos do Supabase:', error.message);
+      return;
+    }
+
+    if (data && data.length) {
+      DB.produtos = data;
+      salvarDB();
+      renderizarLoja();
+      toast('Catálogo sincronizado com o Supabase!');
+    }
+  } catch (e) {
+    console.error('Falha de conexão com o Supabase:', e);
+  }
+}
+
+async function salvarProdutoNoSupabase(produtoObj) {
+  if (!window.supabaseClient) {
+    toast('Supabase não inicializado.');
+    return false;
+  }
+  try {
+    // ✅ Sintaxe v2: .insert([...]).select()
+    const { data, error } = await window.supabaseClient
+      .from('produtos')
+      .insert([produtoObj])
+      .select();
+
+    if (error) {
+      toast('Erro ao salvar: ' + error.message);
+      return false;
+    }
+    toast('Produto salvo no Supabase!');
+    await carregarDB();
+    return true;
+  } catch (e) {
+    toast('Erro de conexão ao salvar.');
+    return false;
+  }
+}
+
+/* ==========================================================================
    INTERFACES DA LOJA / CATÁLOGO
    ========================================================================== */
 function renderizarLoja() {
-  const l = DB.loja;
-  document.getElementById('headerNomeLoja').textContent = l.nome;
-  document.getElementById('admNomeLoja').textContent = l.nome;
+  const l = DB.loja || {};
+  const nomeEl = document.getElementById('headerNomeLoja');
+  if (nomeEl) nomeEl.textContent = l.nome || 'Casa & Obra';
 
-  document.getElementById('infoDeposito').innerHTML = `
-    <div class="info-item">
-      <div class="info-icon">📍</div>
-      <div><b>Endereço Depósito</b><div>${esc(l.endereco)}</div></div>
-    </div>
-    <div class="info-item">
-      <div class="info-icon">🕐</div>
-      <div><b>Horário de Atendimento</b><div>${esc(l.horario)}</div></div>
-    </div>
-    <div class="info-item">
-      <div class="info-icon">📞</div>
-      <div><b>Contato Direto</b><div>${esc(l.telefone)} | WhatsApp: ${esc(l.whatsapp)}</div></div>
-    </div>
-  `;
+  const admNome = document.getElementById('admNomeLoja');
+  if (admNome) admNome.textContent = l.nome || '';
 
-  document.getElementById('footerLojaInfo').textContent = `${l.nome} — ${l.slogan} | ${l.endereco}`;
+  const info = document.getElementById('infoDeposito');
+  if (info) {
+    info.innerHTML = `
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div><b>Endereço Depósito</b><div>${esc(l.endereco || '')}</div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🕐</div>
+        <div><b>Horário de Atendimento</b><div>${esc(l.horario || '')}</div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📞</div>
+        <div><b>Contato Direto</b><div>${esc(l.telefone || '')} | WhatsApp: ${esc(l.whatsapp || '')}</div></div>
+      </div>
+    `;
+  }
+
+  const footer = document.getElementById('footerLojaInfo');
+  if (footer) footer.textContent = `${l.nome || ''} — ${l.slogan || ''} | ${l.endereco || ''}`;
 
   renderizarOfertasSemana();
   renderizarCategorias();
@@ -641,6 +719,7 @@ function iniciarCarrosseisOfertas() {
     if (imgs.length < 2) return;
     const imgEl = box.querySelector('img');
     const dotsBox = box.querySelector('.dots-oferta');
+    if (!imgEl || !dotsBox) return;
     let idx = 0;
     dotsBox.innerHTML = imgs.map((_, i) => `<span class="dot-oferta${i === 0 ? ' ativa' : ''}"></span>`).join('');
     const dots = dotsBox.querySelectorAll('.dot-oferta');
@@ -665,6 +744,7 @@ function imagemOfertaAtual(ofId) {
 function renderizarOfertasSemana() {
   const promos = DB.ofertas && DB.ofertas.length ? DB.ofertas : [];
   const container = document.getElementById('containerPromos');
+  if (!container) return;
 
   if (!promos.length) {
     container.innerHTML = '<div style="color:var(--cinza-texto);font-size:0.92rem;padding:12px">Nenhuma oferta em destaque cadastrada no momento.</div>';
@@ -710,9 +790,10 @@ function renderizarOfertasSemana() {
 
 function renderizarCategorias() {
   const container = document.getElementById('containerCats');
+  if (!container) return;
   let html = `<button class="cat-chip ${catSelecionada === 'todas' ? 'ativa' : ''}" onclick="filtrarCategoria('todas')">Todas</button>`;
   html += DB.categorias.map(c => `
-    <button class="cat-chip ${catSelecionada === c ? 'ativa' : ''}" onclick="filtrarCategoria('${c}')">${esc(c)}</button>
+    <button class="cat-chip ${catSelecionada === c ? 'ativa' : ''}" onclick="filtrarCategoria('${esc(c)}')">${esc(c)}</button>
   `).join('');
   container.innerHTML = html;
 }
@@ -724,8 +805,10 @@ function filtrarCategoria(cat) {
 }
 
 function renderizarProdutos() {
-  const busca = document.getElementById('buscaInput').value.toLowerCase().trim();
+  const buscaInput = document.getElementById('buscaInput');
+  const busca = buscaInput ? buscaInput.value.toLowerCase().trim() : '';
   const grid = document.getElementById('gridProdutos');
+  if (!grid) return;
 
   let list = [...DB.produtos].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
@@ -735,14 +818,15 @@ function renderizarProdutos() {
 
   if (busca) {
     list = list.filter(p =>
-      p.nome.toLowerCase().includes(busca) ||
-      p.marca.toLowerCase().includes(busca) ||
-      p.categoria.toLowerCase().includes(busca) ||
-      p.descricao.toLowerCase().includes(busca)
+      (p.nome || '').toLowerCase().includes(busca) ||
+      (p.marca || '').toLowerCase().includes(busca) ||
+      (p.categoria || '').toLowerCase().includes(busca) ||
+      (p.descricao || '').toLowerCase().includes(busca)
     );
   }
 
-  document.getElementById('totalProdsBadge').textContent = `(${list.length} encontrados)`;
+  const badge = document.getElementById('totalProdsBadge');
+  if (badge) badge.textContent = `(${list.length} encontrados)`;
 
   if (!list.length) {
     grid.innerHTML = '<div style="grid-column:1/-1;padding:30px;text-align:center;color:var(--cinza-texto);font-size:0.95rem">Nenhum material encontrado.</div>';
@@ -793,7 +877,8 @@ function filtrarProdutos() {
 }
 
 function rolarParaCatalogo() {
-  document.getElementById('secCatalogo').scrollIntoView({ behavior: 'smooth' });
+  const el = document.getElementById('secCatalogo');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
 function irParaTopo() {
@@ -820,7 +905,7 @@ function parseImagensOferta(txt) {
 }
 
 /* ==========================================================================
-   UPLOAD DE IMAGENS (BASE64) — Produtos e Ofertas
+   UPLOAD DE IMAGENS
    ========================================================================== */
 function lerImagemUpload(inputEl, callback) {
   const files = inputEl.files;
@@ -893,7 +978,8 @@ function adicionarItemLista(prodId, qtd = 1) {
 }
 
 function adicionarItemComQtdInput(prodId) {
-  const val = Math.max(1, Number(document.getElementById(`qtd_input_${prodId}`).value) || 1);
+  const input = document.getElementById(`qtd_input_${prodId}`);
+  const val = Math.max(1, Number(input ? input.value : 1) || 1);
   adicionarItemLista(prodId, val);
 }
 
@@ -934,13 +1020,17 @@ function carregarListaSalva() {
 function atualizarContadoresLista() {
   salvarLista();
   const totalItens = Object.values(MINHA_LISTA).reduce((a, b) => a + b, 0);
-  document.getElementById('countListaHeader').textContent = totalItens;
-  document.getElementById('countHeroLista').textContent = totalItens;
-  document.getElementById('countBarMobile').textContent = totalItens;
+  const a = document.getElementById('countListaHeader');
+  const b = document.getElementById('countHeroLista');
+  const c = document.getElementById('countBarMobile');
+  if (a) a.textContent = totalItens;
+  if (b) b.textContent = totalItens;
+  if (c) c.textContent = totalItens;
 }
 
 function renderizarGavetaLista() {
   const corpo = document.getElementById('corpoGavetaLista');
+  if (!corpo) return;
   let totalEstimado = 0;
   let totalPix = 0;
 
@@ -1046,7 +1136,7 @@ function enviarListaWhatsDirect() {
 }
 
 /* ==========================================================================
-   ASSISTENTE DA OBRA (CHAT IA INTELLIGENT & CATALOG-BASED)
+   ASSISTENTE DA OBRA (CHAT)
    ========================================================================== */
 function toggleChat() {
   document.getElementById('chatJanela').classList.toggle('aberto');
@@ -1080,7 +1170,6 @@ function enviarMsgChat() {
   }, 400);
 }
 
-/* ---------- helpers do assistente ---------- */
 function _btnLista(p, qtd) {
   return `• **${esc(p.nome)}** — ${moeda(p.precoPromocional || p.preco)}/${esc(p.unidade)}
   <button class="btn-sugestao" onclick="adicionarItemLista('${p.id}', ${qtd})">+ Adicionar ${qtd > 1 ? qtd + ' un' : 'à lista'}</button><br>`;
@@ -1103,7 +1192,6 @@ function processarIntencaoAssistente(query) {
   const numeros = (q.match(/\d+(?:[.,]\d+)?/g) || []).map(n => parseFloat(n.replace(',', '.')));
   const temNum = numeros.length > 0;
 
-  // Saudação
   if (/^(oi|ola|bom dia|boa tarde|boa noite|e ai|eai)\b/.test(q.trim()) && q.trim().length < 22) {
     return `Olá! 👋 Sou o **Assistente da Obra**. Posso ajudar você a:
 
@@ -1115,29 +1203,24 @@ function processarIntencaoAssistente(query) {
     Como posso ajudar?`;
   }
 
-  // Entrega / frete
   if (q.includes('entrega') || q.includes('frete') || q.includes('levam') || q.includes('transporte') || q.includes('carreto')) {
     const l = DB.loja;
     return `🚚 Sim! O **${esc(l.nome)}** faz entregas na região. O frete varia conforme bairro e volume — monte sua lista 📋 e envie pelo WhatsApp que confirmamos o valor total com a entrega!`;
   }
 
-  // Horário / endereço
   if (q.includes('horario') || q.includes('funciona') || q.includes('aberto') || q.includes('endereco') || q.includes('localizacao') || q.includes('onde fica')) {
     const l = DB.loja;
     return `📍 **${esc(l.nome)}**\n${esc(l.endereco)}\n\n🕐 ${esc(l.horario)}\n📞 ${esc(l.telefone)}`;
   }
 
-  // Pagamento
   if (q.includes('pagamento') || q.includes('pix') || q.includes('cartao') || q.includes('parcela') || q.includes('dinheiro') || q.includes('boleto')) {
     return `💳 Aceitamos **PIX, dinheiro, débito e crédito**. Vários produtos têm **desconto no PIX** — procure a etiqueta verde ⚡ nos cards do catálogo!`;
   }
 
-  // Orçamento
   if (q.includes('orcamento') || q.includes('preco') || q.includes('custa') || q.includes('cotacao')) {
     return `💬 Para orçamento é fácil: adicione os materiais à sua lista 📋 pelo botão **"+ Adicionar"** e clique em **"Enviar Lista pelo WhatsApp"**. A gente confirma preço, estoque e frete na hora!`;
   }
 
-  // Concreto / laje / contrapiso
   if (q.includes('concreto') || q.includes('laje') || q.includes('contrapiso') || q.includes('sapata') || (q.includes('funda') && q.includes('cimento'))) {
     if (q.includes('contrapiso') && temNum) {
       return calcularConcretoTxt(numeros[0] * 0.05, `contrapiso de ${numeros[0]} m² (espessura de 5 cm)`);
@@ -1149,7 +1232,6 @@ function processarIntencaoAssistente(query) {
     return `🧱 Posso calcular o material para concreto! Me informe:\n• **Área em m² + espessura em cm** → ex.: *"laje de 40 m² com 10 cm"*\n• Ou **volume em m³** → ex.: *"concreto 2 m³"*\n• Ou simplesmente *"contrapiso de 30 m²"* (considero 5 cm)`;
   }
 
-  // Tinta
   if (q.includes('tinta') || q.includes('pintar') || q.includes('pintura') || q.includes('litro') || q.includes('demao')) {
     const tintas = DB.produtos.filter(p => p.categoria === 'Tintas' || p.nome.toLowerCase().includes('tinta'));
     if (temNum) {
@@ -1167,7 +1249,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Argamassa
   if (q.includes('argamassa') || q.includes('cola') || q.includes('assentamento') || q.includes('rejunte')) {
     const argamassas = DB.produtos.filter(p => p.categoria === 'Argamassa' || p.nome.toLowerCase().includes('argamassa'));
     let res = '';
@@ -1180,7 +1261,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Parede / blocos / tijolos
   if (q.includes('parede') || q.includes('tijolo') || q.includes('bloco') || q.includes('alvenaria')) {
     const blocos = DB.produtos.filter(p => p.categoria === 'Blocos e Tijolos');
     if (temNum) {
@@ -1194,13 +1274,11 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Telhado
   if (q.includes('telhado') || q.includes('telha') || q.includes('cobertura')) {
     if (temNum) return `🏠 Para **${numeros[0]} m² de telhado**: ~**${Math.ceil(numeros[0] * 16)} telhas cerâmicas** (16 un/m²) + madeiramento. Telhas e madeiras sob consulta no WhatsApp!`;
     return `🏠 Telha cerâmica: consumo médio de **16 unidades por m²** de telhado. Me diga a área em m² que eu estimo a quantidade!`;
   }
 
-  // Impermeabilização
   if (q.includes('imperme') || q.includes('vazamento') || q.includes('umidade') || q.includes('infiltra')) {
     const imps = DB.produtos.filter(p => p.categoria === 'Impermeabilizantes');
     let res = temNum
@@ -1211,7 +1289,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Cimento
   if (q.includes('cimento')) {
     const cimentos = DB.produtos.filter(p => p.categoria === 'Cimento' || p.nome.toLowerCase().includes('cimento'));
     if (cimentos.length) {
@@ -1224,7 +1301,6 @@ function processarIntencaoAssistente(query) {
     return `No momento não encontrei cimento cadastrado. Consulte a disponibilidade no WhatsApp!`;
   }
 
-  // Areia / brita
   if (q.includes('areia') || q.includes('brita') || q.includes('pedra')) {
     let res = `⛏️ Areia e brita são vendidas por **m³**. Referência para concreto (traço 1:2:3): por m³ são ~7 sacos de cimento + 0,5 m³ de areia + 0,8 m³ de brita.\n\n`;
     const areias = DB.produtos.filter(p => p.categoria === 'Areia');
@@ -1237,7 +1313,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Hidráulica
   if (q.includes('hidraul') || q.includes('encanamento') || q.includes('cano') || q.includes('tubo') || q.includes('esgoto') || q.includes('agua')) {
     const prods = DB.produtos.filter(p => p.categoria === 'Material Hidráulico');
     let res = `🔧 **Dicas hidráulicas:** tubos **PVC soldável** para água fria e **PPR** para água quente; esgoto usa **PVC com anel de vedação**. Sempre faça o **teste de pressão** antes de fechar a parede!\n\n`;
@@ -1245,7 +1320,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Elétrica
   if (q.includes('eletric') || q.includes('fio') || q.includes('cabo') || q.includes('disjuntor') || q.includes('tomada') || q.includes('interruptor') || q.includes('chuveiro')) {
     const prods = DB.produtos.filter(p => p.categoria === 'Material Elétrico');
     let res = `⚡ **Dicas elétricas:** tomadas → fio de **2,5 mm²**; iluminação → **1,5 mm²**; chuveiro → **4 mm²** com disjuntor próprio. Nunca misture bitolas no mesmo circuito!\n\n`;
@@ -1253,7 +1327,6 @@ function processarIntencaoAssistente(query) {
     return res;
   }
 
-  // Ferramentas
   if (q.includes('ferramenta') || q.includes('furadeira') || q.includes('alicate') || q.includes('martelo')) {
     const prods = DB.produtos.filter(p => p.categoria === 'Ferramentas');
     return prods.length
@@ -1261,7 +1334,6 @@ function processarIntencaoAssistente(query) {
       : `🔨 Ferramentas sob consulta no WhatsApp — envie sua lista!`;
   }
 
-  // Piso / porcelanato
   if (q.includes('piso') || q.includes('porcelanato') || q.includes('azulejo') || q.includes('metro quadrado') || q.includes('revestimento')) {
     if (temNum) {
       const m2 = numeros[0];
@@ -1278,7 +1350,6 @@ function processarIntencaoAssistente(query) {
     return `Para calcular piso/porcelanato, me diga quantos **m²** tem o ambiente. Ex.: *"piso para 25 m²"*.`;
   }
 
-  // Busca genérica no catálogo
   const palavras = q.split(' ').filter(w => w.length > 3);
   let achados = [];
   palavras.forEach(w => {
@@ -1297,7 +1368,7 @@ function processarIntencaoAssistente(query) {
 }
 
 /* ==========================================================================
-   PAINEL ADMINISTRATIVO (SENHA & GESTÃO)
+   PAINEL ADMINISTRATIVO
    ========================================================================== */
 function abrirAdmin() {
   document.getElementById('lojaView').style.display = 'none';
@@ -1335,13 +1406,11 @@ function autenticarAdmin() {
 function setTabAdmin(aba) {
   adminAbaAtiva = aba;
   document.querySelectorAll('.adm-tab-btn').forEach(btn => btn.classList.remove('ativa'));
-
   document.querySelectorAll('.adm-tab-btn').forEach(b => {
     b.classList.toggle('ativa', b.dataset.aba === aba);
   });
 
   const container = document.getElementById('admConteudoAba');
-
   if (aba === 'produtos') {
     renderizarAdminProdutos(container);
   } else if (aba === 'ofertas') {
@@ -1351,7 +1420,6 @@ function setTabAdmin(aba) {
   }
 }
 
-/* GESTÃO DE PRODUTOS NO ADMIN */
 function renderizarAdminProdutos(container) {
   container.innerHTML = `
     <div class="card-adm">
@@ -1445,7 +1513,7 @@ function renderizarAdminProdutos(container) {
   `;
 }
 
-function salvarProdutoAdm(e) {
+async function salvarProdutoAdm(e) {
   e.preventDefault();
   const id = document.getElementById('prod_id').value;
   const pData = {
@@ -1470,7 +1538,15 @@ function salvarProdutoAdm(e) {
   }
 
   salvarDB();
-  toast('Produto salvo com sucesso!');
+  toast('Produto salvo localmente!');
+
+  // Tenta enviar para o Supabase (não bloqueia o fluxo)
+  try {
+    await salvarProdutoNoSupabase(pData);
+  } catch (err) {
+    console.warn('Não foi possível sincronizar com o Supabase:', err);
+  }
+
   setTabAdmin('produtos');
 }
 
@@ -1512,7 +1588,6 @@ function limparFormProdAdm() {
   limparImagemProduto();
 }
 
-/* GESTÃO DE OFERTAS E BANNERS NO ADMIN */
 function renderizarAdminOfertas(container) {
   const ofertas = DB.ofertas || [];
 
@@ -1522,7 +1597,6 @@ function renderizarAdminOfertas(container) {
       <button class="btn btn-amarelo" onclick="mostrarFormOfertaAdm()"><span style="font-size:1.2rem">+</span> Adicionar Oferta</button>
     </div>
 
-    <!-- FORMULÁRIO DE CADASTRO/EDIÇÃO DE OFERTA -->
     <div class="card-adm" id="boxFormOferta" style="display:none; border:2px solid var(--amarelo)">
       <h3 id="tituloFormOferta" style="margin-bottom:12px;color:var(--grafite);font-size:1.15rem">➕ Nova Oferta</h3>
       <form id="formOfertaAdm" onsubmit="salvarOfertaAdm(event)">
@@ -1575,7 +1649,6 @@ function renderizarAdminOfertas(container) {
       </form>
     </div>
 
-    <!-- LISTAGEM DE OFERTAS CADASTRADAS -->
     <div class="card-adm">
       <h3 style="margin-bottom:12px;font-size:1.15rem">📋 Ofertas Ativas no Site (${ofertas.length})</h3>
       ${!ofertas.length ? '<p style="color:var(--cinza-texto);font-size:0.92rem">Nenhuma oferta cadastrada no momento. Clique no botão acima para adicionar.</p>' : ''}
@@ -1699,7 +1772,6 @@ function excluirOfertaAdm(id) {
   }
 }
 
-/* DADOS DA LOJA NO ADMIN */
 function renderizarAdminLoja(container) {
   const l = DB.loja;
   container.innerHTML = `
@@ -1751,173 +1823,19 @@ function salvarLojaAdm(e) {
 }
 
 /* ==========================================================================
-   INICIALIZAÇÃO DO SISTEMA
+   INICIALIZAÇÃO
    ========================================================================== */
-  // ==========================================================================
-// BANCO DE DADOS & ESTADO COM SUPABASE
-// ==========================================================================
- let DB = {
-  loja: {
-    nome: 'Casa & Obra Materiais',
-    whatsapp: '5511999998888',
-    telefone: '(11) 99999-8888',
-    endereco: 'Av. dos Construtores, 1200 — Distrito Industrial',
-    horario: 'Seg a Sex: 07:00 às 18:00 | Sáb: 07:00 às 13:00',
-    slogan: 'Tudo para sua obra com preço de depósito e entrega rápida.'
-  },
-  categorias: ['Cimento', 'Areia', 'Brita', 'Blocos e Tijolos', 'Argamassa', 'Pisos e Revestimentos', 'Tintas', 'Ferramentas'],
-  produtos: []
-};
-
- var MINHA_LISTA = {};
- 
- 
-
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function inicializarApp() {
+  carregarListaSalva();
+  carregarDB(); // carrega local + sincroniza Supabase
 }
 
-function moeda(v) {
-  return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// Se o DOM já está pronto, inicializa; senão aguarda
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarApp);
+} else {
+  inicializarApp();
 }
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('mostra');
-  setTimeout(() => t.classList.remove('mostra'), 2500);
-}
-
-// Carregar produtos do Supabase
-async function carregarDB() {
-  try {
-    const { data, error } = await supabaseClient.from('produtos').select('*');
-    if (error) {
-      console.error('Erro ao buscar produtos:', error.message);
-      toast('Erro ao carregar produtos do banco.');
-    } else {
-      DB.produtos = data || [];
-    }
-  } catch (e) {
-    console.error('Falha de conexão com o Supabase:', e);
-  }
-  renderizarLoja();
-}
-
-// Salvar / Adicionar novo produto no Supabase (Painel Admin)
-async function salvarProdutoNoSupabase(produtoObj) {
-  try {
-    const { data, error } = await supabase.from('produtos').insert([produtoObj]).select();
-    if (error) {
-      toast('Erro ao salvar: ' + error.message);
-      return false;
-    } else {
-      toast('Produto salvo com sucesso no Supabase!');
-      await carregarDB();
-      return true;
-    }
-  } catch (e) {
-    toast('Erro de conexão ao salvar.');
-    return false;
-  }
-}
-
-function renderizarLoja() {
-  const l = DB.loja;
-  document.getElementById('headerNomeLoja').textContent = l.nome;
-  document.getElementById('admNomeLoja').textContent = l.nome;
-  document.getElementById('footerLojaInfo').textContent = `${l.nome} — ${l.slogan} | ${l.endereco}`;
-  renderizarProdutos();
-}
-
-function renderizarProdutos() {
-  const grid = document.getElementById('gridProdutos');
-  if (!DB.produtos || DB.produtos.length === 0) {
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 20px; color:var(--cinza-texto);">Nenhum produto cadastrado no momento.</p>';
-    return;
-  }
-
-  grid.innerHTML = DB.produtos.map(p => `
-    <div class="card-prod">
-      <div class="card-prod-img" onclick="abrirModalFoto('${esc(p.imagem)}')">
-        <img src="${esc(p.imagem)}" alt="${esc(p.nome)}">
-      </div>
-      <div class="card-prod-body">
-        <div class="prod-marca">${esc(p.marca)}</div>
-        <div class="prod-nome">${esc(p.nome)}</div>
-        <div class="prod-estoque">Estoque: ${p.estoque}</div>
-        <div style="font-weight:900;color:var(--vermelho);margin-top:auto;">${moeda(p.preco)}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function abrirModalFoto(url) {
-  document.getElementById('imgModalExpandida').src = url;
-  document.getElementById('modalFoto').classList.add('aberto');
-}
-
-function fecharModalFoto() {
-  document.getElementById('modalFoto').classList.remove('aberto');
-}
-
-function abrirGavetaLista() {
-  document.getElementById('fundoGaveta').classList.add('aberto');
-  document.getElementById('gavetaLista').classList.add('aberto');
-}
-
-function fecharGavetaLista() {
-  document.getElementById('fundoGaveta').classList.remove('aberto');
-  document.getElementById('gavetaLista').classList.remove('aberto');
-}
-
-function toggleChat() {
-  document.getElementById('chatJanela').classList.toggle('aberto');
-}
-
-function abrirAdmin() {
-  document.getElementById('lojaView').style.display = 'none';
-  document.getElementById('adminView').classList.add('aberto');
-}
-
-function fecharAdmin() {
-  document.getElementById('adminView').classList.remove('aberto');
-  document.getElementById('lojaView').style.display = 'block';
-}
-
-function autenticarAdmin() {
-  const senha = document.getElementById('admSenhaInput').value;
-  if (senha === ADMIN_SENHA) {
-    document.getElementById('admLoginView').style.display = 'none';
-    document.getElementById('admPainelView').style.display = 'block';
-    toast('Acesso permitido!');
-  } else {
-    toast('Senha incorreta!');
-  }
-}
-
-function sairAdmin() {
-  document.getElementById('admPainelView').style.display = 'none';
-  document.getElementById('admLoginView').style.display = 'block';
-  fecharAdmin();
-}
-
-function enviarListaWhatsDirect() {
-  const l = DB.loja;
-  const texto = encodeURIComponent("Olá! Gostaria de solicitar um orçamento para os materiais da minha lista.");
-  window.open(`https://wa.me/${l.whatsapp}?text=${texto}`, '_blank');
-}
-
-function irParaTopo() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-function rolarParaCatalogo() { document.getElementById('secCatalogo').scrollIntoView({ behavior: 'smooth' }); }
-
-window.onload = () => {
-  carregarDB();
-};
-carregarDB();
-carregarListaSalva();
-renderizarLoja();
 </script>
 </body>
 </html>
-

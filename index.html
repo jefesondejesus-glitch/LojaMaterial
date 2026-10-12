@@ -6,52 +6,6 @@
   <title>Supabase v2 - Exemplo</title>
 </head>
 <body>
-  <h1>Teste Supabase v2</h1>
-  <button id="btn">Buscar dados</button>
-  <pre id="out"></pre>
-
-  <!-- ✅ Supabase v2 via ESM CDN (forma recomendada em HTML puro) -->
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-    // ⚠️ Substitua pelas SUAS credenciais
-    const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
-    const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON';
-
-    // ✅ Inicialização correta do v2
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Expor globalmente se necessário (para uso em outros scripts não-module)
-    window.supabase = supabase;
-
-    document.getElementById('btn').addEventListener('click', async () => {
-      // ✅ Sintaxe v2: .select() sempre antes de filtros
-      const { data, error } = await supabase
-        .from('sua_tabela')
-        .select('*');
-
-      if (error) {
-        console.error('Erro:', error);
-        document.getElementById('out').textContent = JSON.stringify(error, null, 2);
-        return;
-      }
-      document.getElementById('out').textContent = JSON.stringify(data, null, 2);
-    });
-  </script>
-</body>
-</html>
-⚠️ Erros comuns do Supabase v1 → v2 que costumo ver:
-v1 (errado no v2)	v2 (correto)
-supabase.auth.session()	supabase.auth.getSession()
-supabase.auth.user()	supabase.auth.getUser()
-supabase.from('t').select('*').eq(...) retornando direto	Agora sempre retorna { data, error }
-supabase.auth.onAuthStateChange((event, session) => ...)	Igual, mas session pode ser null — trate
-insert([{...}]) sem .select()	Use .insert([...]).select() se quiser retorno
-Variável global supabase sobrescrevendo a lib	Use outro nome, ex: sb ou supabaseClient
-CDN v1: https://cdn.jsdelivr.net/npm/@supabase/supabase-js	v2 ESM: https://esm.sh/@supabase/supabase-js@2
-📌 Cole seu código HTML completo e eu devolvo ele 100% corrigido, com destaque nas mudanças feitas.
-
-Analisei todo o código e encontrei vários erros críticos, incluindo duplicações de funções, variáveis não declaradas, e uma inicialização do Supabase totalmente incorreta. Aqui está o arquivo corrigido e funcional:
 
 html
 <!DOCTYPE html>

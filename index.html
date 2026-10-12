@@ -1791,7 +1791,7 @@ function toast(msg) {
 // Carregar produtos do Supabase
 async function carregarDB() {
   try {
-    const { data, error } = await supabase.from('produtos').select('*');
+    const { data, error } = await supabaseClient.from('produtos').select('*');
     if (error) {
       console.error('Erro ao buscar produtos:', error.message);
       toast('Erro ao carregar produtos do banco.');

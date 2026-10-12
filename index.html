@@ -1750,6 +1750,167 @@ function salvarLojaAdm(e) {
 /* ==========================================================================
    INICIALIZAÇÃO DO SISTEMA
    ========================================================================== */
+  // ==========================================================================
+// BANCO DE DADOS & ESTADO COM SUPABASE
+// ==========================================================================
+let DB = {
+  loja: {
+    nome: 'Casa & Obra Materiais',
+    whatsapp: '5511999998888',
+    telefone: '(11) 99999-8888',
+    endereco: 'Av. dos Construtores, 1200 — Distrito Industrial',
+    horario: 'Seg a Sex: 07:00 às 18:00 | Sáb: 07:00 às 13:00',
+    slogan: 'Tudo para sua obra com preço de depósito e entrega rápida.'
+  },
+  categorias: ['Cimento', 'Areia', 'Brita', 'Blocos e Tijolos', 'Argamassa', 'Pisos e Revestimentos', 'Tintas', 'Ferramentas'],
+  produtos: []
+};
+
+let MINHA_LISTA = {};
+const ADMIN_SENHA = '927031';
+let catSelecionada = 'todas';
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function moeda(v) {
+  return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('mostra');
+  setTimeout(() => t.classList.remove('mostra'), 2500);
+}
+
+// Carregar produtos do Supabase
+async function carregarDB() {
+  try {
+    const { data, error } = await supabase.from('produtos').select('*');
+    if (error) {
+      console.error('Erro ao buscar produtos:', error.message);
+      toast('Erro ao carregar produtos do banco.');
+    } else {
+      DB.produtos = data || [];
+    }
+  } catch (e) {
+    console.error('Falha de conexão com o Supabase:', e);
+  }
+  renderizarLoja();
+}
+
+// Salvar / Adicionar novo produto no Supabase (Painel Admin)
+async function salvarProdutoNoSupabase(produtoObj) {
+  try {
+    const { data, error } = await supabase.from('produtos').insert([produtoObj]).select();
+    if (error) {
+      toast('Erro ao salvar: ' + error.message);
+      return false;
+    } else {
+      toast('Produto salvo com sucesso no Supabase!');
+      await carregarDB();
+      return true;
+    }
+  } catch (e) {
+    toast('Erro de conexão ao salvar.');
+    return false;
+  }
+}
+
+function renderizarLoja() {
+  const l = DB.loja;
+  document.getElementById('headerNomeLoja').textContent = l.nome;
+  document.getElementById('admNomeLoja').textContent = l.nome;
+  document.getElementById('footerLojaInfo').textContent = `${l.nome} — ${l.slogan} | ${l.endereco}`;
+  renderizarProdutos();
+}
+
+function renderizarProdutos() {
+  const grid = document.getElementById('gridProdutos');
+  if (!DB.produtos || DB.produtos.length === 0) {
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 20px; color:var(--cinza-texto);">Nenhum produto cadastrado no momento.</p>';
+    return;
+  }
+
+  grid.innerHTML = DB.produtos.map(p => `
+    <div class="card-prod">
+      <div class="card-prod-img" onclick="abrirModalFoto('${esc(p.imagem)}')">
+        <img src="${esc(p.imagem)}" alt="${esc(p.nome)}">
+      </div>
+      <div class="card-prod-body">
+        <div class="prod-marca">${esc(p.marca)}</div>
+        <div class="prod-nome">${esc(p.nome)}</div>
+        <div class="prod-estoque">Estoque: ${p.estoque}</div>
+        <div style="font-weight:900;color:var(--vermelho);margin-top:auto;">${moeda(p.preco)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function abrirModalFoto(url) {
+  document.getElementById('imgModalExpandida').src = url;
+  document.getElementById('modalFoto').classList.add('aberto');
+}
+
+function fecharModalFoto() {
+  document.getElementById('modalFoto').classList.remove('aberto');
+}
+
+function abrirGavetaLista() {
+  document.getElementById('fundoGaveta').classList.add('aberto');
+  document.getElementById('gavetaLista').classList.add('aberto');
+}
+
+function fecharGavetaLista() {
+  document.getElementById('fundoGaveta').classList.remove('aberto');
+  document.getElementById('gavetaLista').classList.remove('aberto');
+}
+
+function toggleChat() {
+  document.getElementById('chatJanela').classList.toggle('aberto');
+}
+
+function abrirAdmin() {
+  document.getElementById('lojaView').style.display = 'none';
+  document.getElementById('adminView').classList.add('aberto');
+}
+
+function fecharAdmin() {
+  document.getElementById('adminView').classList.remove('aberto');
+  document.getElementById('lojaView').style.display = 'block';
+}
+
+function autenticarAdmin() {
+  const senha = document.getElementById('admSenhaInput').value;
+  if (senha === ADMIN_SENHA) {
+    document.getElementById('admLoginView').style.display = 'none';
+    document.getElementById('admPainelView').style.display = 'block';
+    toast('Acesso permitido!');
+  } else {
+    toast('Senha incorreta!');
+  }
+}
+
+function sairAdmin() {
+  document.getElementById('admPainelView').style.display = 'none';
+  document.getElementById('admLoginView').style.display = 'block';
+  fecharAdmin();
+}
+
+function enviarListaWhatsDirect() {
+  const l = DB.loja;
+  const texto = encodeURIComponent("Olá! Gostaria de solicitar um orçamento para os materiais da minha lista.");
+  window.open(`https://wa.me/${l.whatsapp}?text=${texto}`, '_blank');
+}
+
+function irParaTopo() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function rolarParaCatalogo() { document.getElementById('secCatalogo').scrollIntoView({ behavior: 'smooth' }); }
+
+window.onload = () => {
+  carregarDB();
+};
 carregarDB();
 carregarListaSalva();
 renderizarLoja();

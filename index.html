@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>V8 Construções — Depósito & Catálogo de Materiais de Construção</title>
+  <title>Casa & Obra — Depósito & Catálogo de Materiais de Construção</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
   <!-- ✅ Supabase v2 via ESM CDN -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -607,12 +608,132 @@ function renderizarLoja() {
   if (admNome) admNome.textContent = l.nome || 'Casa & Obra';
 }
 
-// Inicialização automática ao carregar a página ou escutar o evento do Supabase
+function irParaTopo() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function rolarParaCatalogo() {
+  document.getElementById('secCatalogo')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function abrirGavetaLista() {
+  document.getElementById('gavetaLista')?.classList.add('aberto');
+  document.getElementById('fundoGaveta')?.classList.add('aberto');
+}
+
+function fecharGavetaLista() {
+  document.getElementById('gavetaLista')?.classList.remove('aberto');
+  document.getElementById('fundoGaveta')?.classList.remove('aberto');
+}
+
+function toggleChat() {
+  const janela = document.getElementById('chatJanela');
+  if (janela) {
+    const aberto = janela.classList.toggle('aberto');
+    if (aberto) {
+      document.getElementById('chatInput')?.focus();
+    }
+  }
+}
+
+function enviarMsgChat() {
+  const input = document.getElementById('chatInput');
+  const corpo = document.getElementById('chatCorpo');
+  if (!input || !corpo || !input.value.trim()) return;
+
+  const txt = esc(input.value.trim());
+  input.value = '';
+
+  corpo.innerHTML += `<div class="chat-msg eu">${txt}</div>`;
+  corpo.scrollTop = corpo.scrollHeight;
+
+  setTimeout(() => {
+    let resposta = "Entendido! Posso te ajudar a calcular a quantidade de materiais ou adicionar itens à sua lista de orçamento.";
+    const t = txt.toLowerCase();
+
+    if (t.includes('piso') || t.includes('m²')) {
+      resposta = "Para calcular pisos e revestimentos, adicione sempre 10% a mais para recortes e perdas. Me diga quantos metros quadrados você tem que te indico as melhores opções!";
+    } else if (t.includes('tinta')) {
+      resposta = "Uma lata de 18L de tinta rende em média de 70m² a 275m² por demão, dependendo da superfície. Geralmente indicamos de 2 a 3 demãos.";
+    } else if (t.includes('entrega')) {
+      resposta = "Sim! Realizamos entregas rápidas na região. O valor do frete varia de acordo com a distância e o volume da carga.";
+    } else if (t.includes('horário') || t.includes('funcionamento')) {
+      resposta = "Funcionamos de Segunda a Sexta das 07:00 às 18:00 e Sábado das 07:00 às 13:00.";
+    }
+
+    corpo.innerHTML += `<div class="chat-msg bot">${resposta}</div>`;
+    corpo.scrollTop = corpo.scrollHeight;
+  }, 600);
+}
+
+function sugestaoChat(texto) {
+  const input = document.getElementById('chatInput');
+  if (input) {
+    input.value = texto;
+    enviarMsgChat();
+  }
+}
+
+function fecharModalFoto() {
+  document.getElementById('modalFoto')?.classList.remove('aberto');
+}
+
+function enviarListaWhatsDirect() {
+  const l = DB.loja || {};
+  const fone = l.whatsapp || '5511999998888';
+  window.open(`https://wa.me/${fone}?text=Olá,%20gostaria%20de%20um%20orçamento%20para%20minha%20obra.`, '_blank');
+}
+
+function abrirAdmin() {
+  document.getElementById('lojaView').style.display = 'none';
+  document.getElementById('adminView').classList.add('aberto');
+}
+
+function fecharAdmin() {
+  document.getElementById('adminView').classList.remove('aberto');
+  document.getElementById('lojaView').style.display = 'block';
+}
+
+function autenticarAdmin() {
+  const senha = document.getElementById('admSenhaInput')?.value;
+  if (senha === ADMIN_SENHA) {
+    document.getElementById('admLoginView').style.display = 'none';
+    document.getElementById('admPainelView').style.display = 'block';
+    toast('Login efetuado com sucesso!');
+  } else {
+    toast('Senha incorreta.');
+  }
+}
+
+function sairAdmin() {
+  document.getElementById('admLoginView').style.display = 'block';
+  document.getElementById('admPainelView').style.display = 'none';
+  fecharAdmin();
+}
+
+function setTabAdmin(aba) {
+  adminAbaAtiva = aba;
+  document.querySelectorAll('.adm-tab-btn').forEach(btn => {
+    btn.classList.toggle('ativa', btn.dataset.aba === aba);
+  });
+  // Aqui você pode renderizar o conteúdo da aba do painel administrativo
+}
+
+function filtrarProdutos() {
+  // Lógica de filtro por barra de busca
+}
+
+function limparListaCompleta() {
+  MINHA_LISTA = {};
+  toast('Lista esvaziada.');
+  fecharGavetaLista();
+}
+
+// Inicialização automática
 window.addEventListener('supabase-ready', () => {
   carregarDB();
 });
 
-// Fallback caso o evento dispare antes do script principal
 if (window.supabaseReady) {
   carregarDB();
 }

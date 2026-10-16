@@ -38,11 +38,18 @@
       --vermelho: #E53935;
       --sombra: 0 4px 12px rgba(0,0,0,0.06);
       --raio: 10px;
+
+      --fonte-principal: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --fonte-titulos: inherit;
+      --tamanho-titulo-secao: 1.35rem;
+      --tamanho-preco: 1.75rem;
+      --altura-img-produto: 110px;
+      --altura-img-oferta: 180px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html { font-size: 16px; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--cinza-fundo); color: var(--grafite); line-height: 1.5; padding-bottom: 75px; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--fonte-principal); background: var(--cinza-fundo); color: var(--grafite); line-height: 1.5; padding-bottom: 75px; -webkit-font-smoothing: antialiased; }
 
     button { font-family: inherit; cursor: pointer; border: none; outline: none; }
     input, select, textarea { font-family: inherit; font-size: 1rem; }
@@ -80,7 +87,7 @@
 
     .hero { background: #fff; border-bottom: 1px solid var(--cinza-borda); padding: 28px 0; }
     .hero-box { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
-    .hero-title { font-size: 1.85rem; font-weight: 900; color: var(--grafite); line-height: 1.25; }
+    .hero-title { font-size: 1.85rem; font-weight: 900; color: var(--grafite); line-height: 1.25; font-family: var(--fonte-titulos); }
     .hero-sub { font-size: 1.05rem; color: var(--cinza-texto); max-width: 680px; line-height: 1.5; }
     .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; margin-top: 6px; }
 
@@ -88,30 +95,79 @@
     .bar-whats-hero span { font-weight: 700; color: #1B5E20; font-size: 0.98rem; }
 
     .secao { margin-top: 28px; }
-    .secao-titulo { font-size: 1.35rem; font-weight: 800; color: var(--grafite); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .secao-titulo { font-size: var(--tamanho-titulo-secao); font-weight: 800; color: var(--grafite); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; font-family: var(--fonte-titulos); }
 
-    .promos-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .promos-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
     .promos-scroll::-webkit-scrollbar { display: none; }
-    .card-promo { flex: 0 0 290px; scroll-snap-align: start; background: #fff; border-radius: var(--raio); border: 2px solid #FFCDD2; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--sombra); }
-    .card-promo-img { height: 230px; background: #fafafa; position: relative; overflow: hidden; cursor: pointer; }
+    .card-promo {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      background: #fff;
+      border-radius: var(--raio);
+      border: 2px solid #FFCDD2;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: var(--sombra);
+    }
+    .card-promo-img {
+      height: var(--altura-img-oferta);
+      background: #fafafa;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
     .card-promo-img img { width: 100%; height: 100%; object-fit: cover; }
-    .card-promo-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .card-promo-title { font-weight: 800; font-size: 1.1rem; color: var(--grafite); line-height: 1.3; }
-    .card-promo-desc { font-size: 0.9rem; color: var(--cinza-texto); margin-bottom: 4px; line-height: 1.35; }
+    .card-promo-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .card-promo-title { font-weight: 800; font-size: 0.95rem; color: var(--grafite); line-height: 1.25; }
+    .card-promo-desc { font-size: 0.82rem; color: var(--cinza-texto); line-height: 1.3; }
     .precos-box { margin-top: auto; padding-top: 6px; }
-    .preco-antigo { font-size: 1rem; color: #777; text-decoration: line-through; }
-    .preco-atual { font-size: 1.75rem; font-weight: 900; color: var(--vermelho); }
-    .preco-pix { font-size: 1rem; font-weight: 700; color: #1B5E20; }
+    .preco-antigo { font-size: 0.9rem; color: #777; text-decoration: line-through; }
+    .preco-atual { font-size: 1.55rem; font-weight: 900; color: var(--vermelho); }
+    .preco-pix { font-size: 0.9rem; font-weight: 700; color: #1B5E20; }
 
     .cats-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
     .cats-list::-webkit-scrollbar { display: none; }
     .cat-chip { flex: 0 0 auto; background: #fff; border: 1px solid var(--cinza-borda); padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 0.92rem; color: var(--grafite); cursor: pointer; }
     .cat-chip.ativa { background: var(--grafite); color: var(--amarelo); border-color: var(--grafite); }
 
-    .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-    .card-prod { background: #fff; border-radius: var(--raio); border: 1px solid var(--cinza-borda); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--sombra); }
+    .grid-produtos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .card-prod {
+      background: #fff;
+      border-radius: var(--raio);
+      border: 1px solid var(--cinza-borda);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--sombra);
+      transition: transform .2s;
+    }
+    .card-prod:hover { transform: translateY(-2px); }
 
-    .card-prod-img { width: 100%; height: 110px; background: #f9f9f9; position: relative; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .card-prod-img {
+      width: 100%;
+      height: var(--altura-img-produto);
+      background: #f9f9f9;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .card-prod-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
     .card-prod-img:hover img { transform: scale(1.05); }
 
@@ -122,8 +178,26 @@
     .prod-estoque.baixo { color: #E65100; }
     .prod-estoque.zero { color: var(--vermelho); }
 
+    .prod-preco-row { display: flex; flex-direction: column; gap: 1px; margin-top: 4px; }
+    .prod-preco-antigo { font-size: 0.68rem; color: #999; text-decoration: line-through; }
+    .prod-preco { font-size: 0.98rem; font-weight: 900; color: var(--vermelho); line-height: 1.1; }
+    .prod-pix { font-size: 0.66rem; color: #1B5E20; font-weight: 700; }
+
     .prod-qtd-row { display: flex; align-items: center; gap: 4px; margin-top: auto; padding-top: 6px; }
     .input-qtd { width: 34px; padding: 4px 2px; border: 1px solid var(--cinza-borda); border-radius: 5px; text-align: center; font-weight: 800; font-size: 0.72rem; }
+    .btn-add-lista {
+      flex: 1;
+      background: var(--amarelo);
+      color: var(--grafite);
+      font-weight: 900;
+      font-size: 0.68rem;
+      padding: 6px 4px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: background .2s;
+    }
+    .btn-add-lista:hover { background: var(--amarelo-escuro); }
 
     .info-deposito { background: #fff; border-radius: var(--raio); border: 1px solid var(--cinza-borda); padding: 20px; margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; font-size: 0.95rem; }
     .info-item { display: flex; gap: 14px; align-items: flex-start; }
@@ -169,25 +243,41 @@
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--cinza-borda); border-radius: 6px; outline: none; font-size: 0.95rem; }
-    .adm-nav { background: var(--grafite); color: #fff; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.95rem; }
-    .adm-tabs { display: flex; gap: 8px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .adm-nav { background: var(--grafite); color: #fff; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.95rem; position: sticky; top: 0; z-index: 50; }
+    .adm-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
     .adm-tab-btn { background: var(--grafite-claro); color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 700; font-size: 0.88rem; }
     .adm-tab-btn.ativa { background: var(--amarelo); color: var(--grafite); }
     .adm-panel { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
     .card-adm { background: #fff; border-radius: var(--raio); padding: 20px; border: 1px solid var(--cinza-borda); box-shadow: var(--sombra); margin-bottom: 20px; }
+    .card-adm h3 { font-size: 1.1rem; margin-bottom: 14px; }
     .tabela-adm { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 12px; }
     .tabela-adm th, .tabela-adm td { text-align: left; padding: 10px; border-bottom: 1px solid var(--cinza-borda); }
+    .tabela-adm img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+    .btn-acao { padding: 5px 10px; font-size: 0.78rem; border-radius: 5px; font-weight: 700; }
+    .btn-editar { background: var(--amarelo); color: var(--grafite); }
+    .btn-excluir { background: var(--vermelho); color: #fff; }
+
+    .upload-preview { width: 100%; height: 140px; border: 2px dashed var(--cinza-borda); border-radius: 8px; display: grid; place-items: center; overflow: hidden; background: #fafafa; cursor: pointer; margin-bottom: 10px; }
+    .upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-preview span { color: var(--cinza-texto); font-size: 0.85rem; }
+
+    .aparencia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .cor-input { display: flex; align-items: center; gap: 8px; }
+    .cor-input input[type="color"] { width: 48px; height: 38px; padding: 0; border: 1px solid var(--cinza-borda); border-radius: 6px; cursor: pointer; }
+
+    .secoes-ordem { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .secoes-ordem li { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--cinza-fundo); border-radius: 8px; font-weight: 700; }
+    .secoes-ordem .btn-mini { padding: 4px 10px; font-size: 0.8rem; background: var(--grafite); color: #fff; border-radius: 5px; }
+
+    .btn-preview { background: var(--grafite-claro); color: #fff; }
+    .btn-salvar-person { background: var(--verde-whatsapp); color: #fff; }
 
     .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--grafite); color: #fff; padding: 12px 24px; border-radius: 20px; font-weight: 700; font-size: 0.92rem; z-index: 400; opacity: 0; pointer-events: none; transition: opacity .2s ease; border: 1px solid var(--amarelo); }
     .toast.mostra { opacity: 1; }
 
     @media (min-width: 768px) {
-      html { font-size: 16px; }
-      .header-in { justify-content: space-between; }
-      .logo-box, .header-actions, .header-busca { order: 0; }
-      .header-busca { flex: 1; max-width: 480px; }
-      .header-actions { margin-left: 0; }
-      .card-promo-img { height: 250px; }
+      .card-promo-img { height: 200px; }
       .card-prod-img { height: 130px; }
       .grid-produtos { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
       .bar-fixa-mobile { display: none; }
@@ -196,8 +286,6 @@
       .chat-janela { bottom: 90px; }
       .hero-title { font-size: 2.35rem; }
       .secao-titulo { font-size: 1.5rem; }
-      .promos-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); overflow-x: visible; }
-      .card-promo { flex: auto; }
     }
   </style>
 </head>
@@ -207,10 +295,10 @@
   <header class="header">
     <div class="container header-in">
       <div class="logo-box" onclick="irParaTopo()">
-        <div class="logo-icon">🧱</div>
+        <div class="logo-icon" id="logoIcone">🧱</div>
         <div class="logo-text">
           <h1 id="headerNomeLoja">CASA & OBRA</h1>
-          <span>Materiais de Construção</span>
+          <span id="headerSlogan">Materiais de Construção</span>
         </div>
       </div>
 
@@ -230,10 +318,10 @@
     </div>
   </header>
 
-  <section class="hero">
+  <section class="hero" id="secHero">
     <div class="container hero-box">
-      <h2 class="hero-title">Tudo para sua obra em um só lugar.</h2>
-      <p class="hero-sub">Encontre materiais de construção, monte sua lista e peça seu orçamento direto pelo WhatsApp do depósito.</p>
+      <h2 class="hero-title" id="heroTitulo">Tudo para sua obra em um só lugar.</h2>
+      <p class="hero-sub" id="heroSubtitulo">Encontre materiais de construção, monte sua lista e peça seu orçamento direto pelo WhatsApp do depósito.</p>
 
       <div class="bar-whats-hero">
         <span>⚡ Atendimento rápido para orçamento & entregas na região</span>
@@ -249,7 +337,7 @@
   </section>
 
   <main class="container">
-    <section class="secao">
+    <section class="secao" id="secOfertas">
       <div class="secao-titulo">🔥 Ofertas da Semana</div>
       <div class="promos-scroll" id="containerPromos"></div>
     </section>
@@ -259,7 +347,7 @@
       <div class="cats-list" id="containerCats"></div>
     </section>
 
-    <section class="secao">
+    <section class="secao" id="secProdutos">
       <div class="secao-titulo">
         🧱 Catálogo de Produtos
         <span id="totalProdsBadge" style="font-size:0.88rem;color:var(--cinza-texto);font-weight:normal"></span>
@@ -279,7 +367,7 @@
     </button>
   </div>
 
-  <footer style="text-align:center;padding:32px 16px;color:var(--cinza-texto);font-size:0.88rem;line-height:1.6">
+  <footer id="rodapeLoja" style="text-align:center;padding:32px 16px;color:var(--cinza-texto);font-size:0.88rem;line-height:1.6">
     <span id="footerLojaInfo"></span><br><br>
     <a href="#" onclick="abrirAdmin();return false" style="color:var(--grafite);font-weight:bold;text-decoration:underline">🔒 Acesso Restrito (Gestão do Depósito)</a>
   </footer>
@@ -338,27 +426,49 @@
   <img id="imgModalExpandida" src="" alt="Imagem Ampliada">
 </div>
 
+<!-- ADMIN -->
 <div id="adminView">
   <div id="admLoginView">
     <div class="login-box">
       <h2 style="font-weight:900;margin-bottom:6px;font-size:1.35rem">🔒 Gestão do Depósito</h2>
-      <p style="font-size:0.88rem;color:var(--cinza-texto);margin-bottom:18px">Digite a senha de administrador</p>
+      <p style="font-size:0.88rem;color:var(--cinza-texto);margin-bottom:18px">
+        Entre com seu e-mail e senha de administrador.
+      </p>
+
       <div class="form-group">
-        <label>Senha de Acesso</label>
-        <input type="password" id="admSenhaInput" placeholder="Senha..." onkeydown="if(event.key==='Enter')autenticarAdmin()">
+        <label>E-mail</label>
+        <input type="email" id="admEmailInput" placeholder="admin@casaobra.com" autocomplete="username">
       </div>
-      <button class="btn btn-amarelo" style="width:100%" onclick="autenticarAdmin()">Entrar no Painel</button>
-      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px" onclick="fecharAdmin()">← Voltar à Loja</button>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="admSenhaInput" placeholder="Senha..." autocomplete="current-password"
+               onkeydown="if(event.key==='Enter')autenticarAdmin()">
+      </div>
+
+      <button class="btn btn-amarelo" style="width:100%" onclick="autenticarAdmin()" id="admBtnEntrar">
+        Entrar no Painel
+      </button>
+
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px" onclick="fecharAdmin()">
+        ← Voltar à Loja
+      </button>
+
+      <p style="font-size:0.75rem;color:var(--cinza-texto);margin-top:14px;text-align:center">
+        Se ainda não tiver usuário no Supabase, use a senha local: <b>v8admin</b>
+      </p>
     </div>
   </div>
 
   <div id="admPainelView" style="display:none">
     <div class="adm-nav">
-      <b>⚙️ Painel de Controle — <span id="admNomeLoja"></span></b>
+      <b>⚙️ Painel — <span id="admNomeLoja"></span></b>
       <div class="adm-tabs">
         <button class="adm-tab-btn ativa" data-aba="produtos" onclick="setTabAdmin('produtos')">Produtos</button>
-        <button class="adm-tab-btn" data-aba="ofertas" onclick="setTabAdmin('ofertas')">Ofertas/Banners</button>
+        <button class="adm-tab-btn" data-aba="ofertas" onclick="setTabAdmin('ofertas')">Ofertas</button>
+        <button class="adm-tab-btn" data-aba="banners" onclick="setTabAdmin('banners')">Banners</button>
         <button class="adm-tab-btn" data-aba="loja" onclick="setTabAdmin('loja')">Dados da Loja</button>
+        <button class="adm-tab-btn" data-aba="aparencia" onclick="setTabAdmin('aparencia')">Aparência</button>
         <button class="adm-tab-btn" onclick="fecharAdmin()">Voltar à Loja</button>
         <button class="adm-tab-btn" onclick="sairAdmin()">Sair</button>
       </div>
@@ -376,12 +486,20 @@
 const DB_KEY = 'casaobra_deposito_db_v2';
 const LISTA_KEY = 'casaobra_minha_lista_v1';
 const ADMIN_SENHA = 'v8admin';
+const ADMIN_EMAIL_PADRAO = 'admin@casaobra.com';
 
-let DB = { loja: {}, categorias: [], ofertas: [], produtos: [] };
+let DB = { loja: {}, categorias: [], ofertas: [], produtos: [], banners: [], aparencia: {} };
 let MINHA_LISTA = {};
 let catSelecionada = 'todas';
 let adminAbaAtiva = 'produtos';
+let termoBusca = '';
+let editandoProdutoId = null;
+let editandoOfertaId = null;
+let editandoBannerId = null;
 
+/* ==========================================================================
+   SEED (dados iniciais preservados)
+   ========================================================================== */
 function seedDB() {
   const categorias = [
     'Cimento', 'Areia', 'Brita', 'Blocos e Tijolos', 'Argamassa',
@@ -396,7 +514,10 @@ function seedDB() {
       telefone: '(11) 99999-8888',
       endereco: 'Av. dos Construtores, 1200 — Distrito Industrial',
       horario: 'Seg a Sex: 07:00 às 18:00 | Sáb: 07:00 às 13:00',
-      slogan: 'Tudo para sua obra com preço de depósito e entrega rápida.'
+      slogan: 'Tudo para sua obra com preço de depósito e entrega rápida.',
+      heroTitulo: 'Tudo para sua obra em um só lugar.',
+      heroSubtitulo: 'Encontre materiais de construção, monte sua lista e peça seu orçamento direto pelo WhatsApp do depósito.',
+      rodapeTexto: 'Casa & Obra Materiais — CNPJ 00.000.000/0001-00'
     },
     categorias: categorias,
     ofertas: [
@@ -429,6 +550,7 @@ function seedDB() {
         ]
       }
     ],
+    banners: [],
     produtos: [
       {
         id: 'p1',
@@ -495,10 +617,34 @@ function seedDB() {
         imagem: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80',
         descricao: 'Tijolo vazado 8 furos para alvenaria de vedação.'
       }
-    ]
+    ],
+    aparencia: {
+      corPrimaria: '#FFC400',
+      corSecundaria: '#1E232A',
+      corFundo: '#F4F6F8',
+      corTexto: '#1E232A',
+      corBotoes: '#25D366',
+      fontePrincipal: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      fonteTitulos: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      tamanhoTituloSecao: '1.35rem',
+      tamanhoPreco: '1.75rem',
+      alturaImgProduto: '110px',
+      alturaImgOferta: '180px',
+      logoIcone: '🧱',
+      ordemSecoes: ['ofertas', 'catalogo', 'produtos', 'info'],
+      mostrarHero: true,
+      mostrarOfertas: true,
+      mostrarCatalogo: true,
+      mostrarProdutos: true,
+      mostrarInfo: true,
+      rodapeTexto: 'Casa & Obra Materiais — CNPJ 00.000.000/0001-00'
+    }
   };
 }
 
+/* ==========================================================================
+   PERSISTÊNCIA LOCAL
+   ========================================================================== */
 function carregarDBLocal() {
   try {
     const data = localStorage.getItem(DB_KEY);
@@ -507,16 +653,19 @@ function carregarDBLocal() {
       if (!DB.ofertas) DB.ofertas = [];
       if (!DB.produtos) DB.produtos = [];
       if (!DB.categorias) DB.categorias = seedDB().categorias;
+      if (!DB.banners) DB.banners = [];
+      if (!DB.aparencia) DB.aparencia = seedDB().aparencia;
+      if (!DB.loja) DB.loja = seedDB().loja;
     } else {
       DB = seedDB();
-      salvarDB();
+      salvarDBLocal();
     }
   } catch(e) {
     DB = seedDB();
   }
 }
 
-function salvarDB() {
+function salvarDBLocal() {
   try {
     localStorage.setItem(DB_KEY, JSON.stringify(DB));
   } catch(e) {
@@ -524,6 +673,20 @@ function salvarDB() {
   }
 }
 
+function carregarListaLocal() {
+  try {
+    const data = localStorage.getItem(LISTA_KEY);
+    if (data) MINHA_LISTA = JSON.parse(data);
+  } catch(e) { MINHA_LISTA = {}; }
+}
+
+function salvarListaLocal() {
+  try { localStorage.setItem(LISTA_KEY, JSON.stringify(MINHA_LISTA)); } catch(e) {}
+}
+
+/* ==========================================================================
+   UTILITÁRIOS
+   ========================================================================== */
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -534,89 +697,472 @@ function moeda(v) {
 
 function toast(msg) {
   const t = document.getElementById('toast');
+  if (!t) return;
   t.textContent = msg;
   t.classList.add('mostra');
   setTimeout(() => t.classList.remove('mostra'), 2500);
 }
 
+function gerarId(prefixo = 'id') {
+  return prefixo + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
 /* ==========================================================================
-   SUPABASE v2 — Carregamento e salvamento remoto
+   SUPABASE — CARREGAR E SALVAR
    ========================================================================== */
 async function carregarDB() {
   carregarDBLocal();
+  carregarListaLocal();
+  aplicarAparencia();
   renderizarLoja();
 
-  if (!window.supabaseClient) {
-    console.warn('Supabase ainda não inicializado.');
-    return;
-  }
+  if (!window.supabaseClient) return;
 
   try {
-    const { data, error } = await window.supabaseClient
-      .from('produtos')
-      .select('*');
-
-    if (error) {
-      console.error('Erro ao buscar produtos do Supabase:', error.message);
-      return;
+    const { data: prods, error: errP } = await window.supabaseClient.from('produtos').select('*');
+    if (!errP && prods && prods.length) {
+      DB.produtos = prods;
+      salvarDBLocal();
     }
 
-    if (data && data.length) {
-      DB.produtos = data;
-      salvarDB();
-      renderizarLoja();
-      toast('Catálogo sincronizado com o Supabase!');
+    const { data: oferts, error: errO } = await window.supabaseClient.from('ofertas').select('*');
+    if (!errO && oferts && oferts.length) {
+      DB.ofertas = oferts;
+      salvarDBLocal();
     }
+
+    const { data: configs, error: errC } = await window.supabaseClient.from('config_loja').select('*').limit(1);
+    if (!errC && configs && configs.length) {
+      const cfg = configs[0];
+      if (cfg.dados) DB.loja = { ...DB.loja, ...cfg.dados };
+      if (cfg.aparencia) DB.aparencia = { ...DB.aparencia, ...cfg.aparencia };
+      if (cfg.categorias) DB.categorias = cfg.categorias;
+      salvarDBLocal();
+    }
+
+    const { data: banners, error: errB } = await window.supabaseClient.from('banners').select('*');
+    if (!errB && banners) DB.banners = banners;
+
+    aplicarAparencia();
+    renderizarLoja();
   } catch (e) {
-    console.error('Falha de conexão com o Supabase:', e);
+    console.warn('Supabase indisponível, usando dados locais.', e);
   }
 }
 
-async function salvarProdutoNoSupabase(produtoObj) {
+async function salvarConfigSupabase() {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient
+      .from('config_loja')
+      .upsert({ id: 1, dados: DB.loja, aparencia: DB.aparencia, categorias: DB.categorias });
+    if (error) { console.warn(error); return false; }
+    return true;
+  } catch (e) { return false; }
+}
+
+async function salvarProdutoSupabase(prod) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('produtos').upsert([prod]);
+    if (error) { toast('Erro: ' + error.message); return false; }
+    return true;
+  } catch (e) { return false; }
+}
+
+async function excluirProdutoSupabase(id) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('produtos').delete().eq('id', id);
+    return !error;
+  } catch (e) { return false; }
+}
+
+async function salvarOfertaSupabase(oferta) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('ofertas').upsert([oferta]);
+    if (error) { toast('Erro: ' + error.message); return false; }
+    return true;
+  } catch (e) { return false; }
+}
+
+async function excluirOfertaSupabase(id) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('ofertas').delete().eq('id', id);
+    return !error;
+  } catch (e) { return false; }
+}
+
+async function salvarBannerSupabase(banner) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('banners').upsert([banner]);
+    if (error) { toast('Erro: ' + error.message); return false; }
+    return true;
+  } catch (e) { return false; }
+}
+
+async function excluirBannerSupabase(id) {
+  if (!window.supabaseClient) return false;
+  try {
+    const { error } = await window.supabaseClient.from('banners').delete().eq('id', id);
+    return !error;
+  } catch (e) { return false; }
+}
+
+/* ==========================================================================
+   UPLOAD DE FOTOS
+   ========================================================================== */
+async function uploadFoto(file, pasta = 'produtos') {
   if (!window.supabaseClient) {
     toast('Supabase não inicializado.');
-    return false;
+    return null;
   }
   try {
-    const { data, error } = await window.supabaseClient
-      .from('produtos')
-      .insert([produtoObj])
-      .select();
+    const ext = file.name.split('.').pop();
+    const nomeArquivo = `${pasta}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const { data, error } = await window.supabaseClient.storage
+      .from('imagens')
+      .upload(nomeArquivo, file, { cacheControl: '3600', upsert: false });
 
-    if (error) {
-      toast('Erro ao salvar: ' + error.message);
-      return false;
-    }
-    toast('Produto salvo no Supabase!');
-    await carregarDB();
-    return true;
+    if (error) { toast('Erro no upload: ' + error.message); return null; }
+
+    const { data: urlData } = window.supabaseClient.storage.from('imagens').getPublicUrl(nomeArquivo);
+    return urlData?.publicUrl || null;
   } catch (e) {
-    toast('Erro de conexão ao salvar.');
-    return false;
+    toast('Erro ao enviar imagem.');
+    return null;
   }
 }
 
 /* ==========================================================================
-   INTERFACES DA LOJA / CATÁLOGO
+   APARÊNCIA
+   ========================================================================== */
+function aplicarAparencia() {
+  const a = DB.aparencia || {};
+  const root = document.documentElement;
+  if (a.corPrimaria) root.style.setProperty('--amarelo', a.corPrimaria);
+  if (a.corSecundaria) root.style.setProperty('--grafite', a.corSecundaria);
+  if (a.corFundo) root.style.setProperty('--cinza-fundo', a.corFundo);
+  if (a.corTexto) root.style.setProperty('--cinza-texto', a.corTexto);
+  if (a.corBotoes) root.style.setProperty('--verde-whatsapp', a.corBotoes);
+  if (a.fontePrincipal) root.style.setProperty('--fonte-principal', a.fontePrincipal);
+  if (a.fonteTitulos) root.style.setProperty('--fonte-titulos', a.fonteTitulos);
+  if (a.tamanhoTituloSecao) root.style.setProperty('--tamanho-titulo-secao', a.tamanhoTituloSecao);
+  if (a.tamanhoPreco) root.style.setProperty('--tamanho-preco', a.tamanhoPreco);
+  if (a.alturaImgProduto) root.style.setProperty('--altura-img-produto', a.alturaImgProduto);
+  if (a.alturaImgOferta) root.style.setProperty('--altura-img-oferta', a.alturaImgOferta);
+  if (a.logoIcone) {
+    const el = document.getElementById('logoIcone');
+    if (el) el.textContent = a.logoIcone;
+  }
+
+  const toggles = {
+    secHero: a.mostrarHero !== false,
+    secOfertas: a.mostrarOfertas !== false,
+    secCatalogo: a.mostrarCatalogo !== false,
+    secProdutos: a.mostrarProdutos !== false,
+    infoDeposito: a.mostrarInfo !== false
+  };
+  Object.entries(toggles).forEach(([id, mostrar]) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = mostrar ? '' : 'none';
+  });
+
+  reordenarSecoes();
+
+  if (a.rodapeTexto) {
+    const f = document.getElementById('footerLojaInfo');
+    if (f) f.textContent = a.rodapeTexto;
+  }
+}
+
+function reordenarSecoes() {
+  const main = document.querySelector('#lojaView main.container');
+  if (!main) return;
+
+  const mapa = {
+    ofertas: 'secOfertas',
+    catalogo: 'secCatalogo',
+    produtos: 'secProdutos',
+    info: 'infoDeposito'
+  };
+
+  const ordem = (DB.aparencia && DB.aparencia.ordemSecoes) || ['ofertas', 'catalogo', 'produtos', 'info'];
+
+  ordem.forEach(chave => {
+    const id = mapa[chave];
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el && el.parentElement === main) {
+      main.appendChild(el);
+    }
+  });
+}
+
+/* ==========================================================================
+   RENDERIZAÇÃO DA LOJA
    ========================================================================== */
 function renderizarLoja() {
   const l = DB.loja || {};
+  const a = DB.aparencia || {};
   const nomeEl = document.getElementById('headerNomeLoja');
   if (nomeEl) nomeEl.textContent = l.nome || 'Casa & Obra';
-
+  const sloganEl = document.getElementById('headerSlogan');
+  if (sloganEl && l.slogan) sloganEl.textContent = l.slogan;
+  const heroT = document.getElementById('heroTitulo');
+  if (heroT && (l.heroTitulo || a.heroTitulo)) heroT.textContent = l.heroTitulo || a.heroTitulo;
+  const heroS = document.getElementById('heroSubtitulo');
+  if (heroS && (l.heroSubtitulo || a.heroSubtitulo)) heroS.textContent = l.heroSubtitulo || a.heroSubtitulo;
   const admNome = document.getElementById('admNomeLoja');
   if (admNome) admNome.textContent = l.nome || 'Casa & Obra';
+  const fInfo = document.getElementById('footerLojaInfo');
+  if (fInfo) {
+    fInfo.innerHTML = `${esc(l.nome || '')}<br>${esc(l.endereco || '')}<br>${esc(l.horario || '')}<br>${esc(l.telefone || '')}`;
+  }
+  renderizarOfertas();
+  renderizarCategorias();
+  renderizarProdutos();
+  renderizarInfoDeposito();
+  atualizarContadores();
 }
 
-function irParaTopo() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function renderizarOfertas() {
+  const cont = document.getElementById('containerPromos');
+  if (!cont) return;
+  const ofertas = DB.ofertas || [];
+  if (!ofertas.length) {
+    cont.innerHTML = '<p style="color:var(--cinza-texto);font-size:0.95rem">Nenhuma oferta cadastrada no momento.</p>';
+    return;
+  }
+  cont.innerHTML = ofertas.map(o => {
+    const temPromo = o.precoPromocional && Number(o.precoPromocional) > 0 && Number(o.precoPromocional) < Number(o.precoNormal);
+    const img = o.imagem || (o.imagens && o.imagens[0]) || 'https://via.placeholder.com/400x300?text=Oferta';
+    return `
+      <div class="card-promo">
+        <div class="card-promo-img" onclick="abrirModalFoto('${esc(img)}')">
+          <img src="${esc(img)}" alt="${esc(o.nome)}" loading="lazy">
+        </div>
+        <div class="card-promo-body">
+          ${temPromo ? '<span class="badge badge-promo">Oferta</span>' : ''}
+          <div class="card-promo-title">${esc(o.nome)}</div>
+          <div class="card-promo-desc">${esc(o.descricao || '')}</div>
+          <div class="precos-box">
+            ${temPromo ? `<div class="preco-antigo">${moeda(o.precoNormal)}</div>` : ''}
+            <div class="preco-atual">${moeda(temPromo ? o.precoPromocional : o.precoNormal)}</div>
+          </div>
+          <button class="btn-add-lista" onclick="adicionarOfertaNaLista('${esc(o.id)}')">＋ Adicionar à Lista</button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-function rolarParaCatalogo() {
-  document.getElementById('secCatalogo')?.scrollIntoView({ behavior: 'smooth' });
+function renderizarCategorias() {
+  const cont = document.getElementById('containerCats');
+  if (!cont) return;
+  const cats = DB.categorias || [];
+  const todas = ['todas', ...cats];
+  cont.innerHTML = todas.map(c => `
+    <button class="cat-chip ${catSelecionada === c ? 'ativa' : ''}" onclick="selecionarCategoria('${esc(c)}')">
+      ${c === 'todas' ? 'Todas' : esc(c)}
+    </button>
+  `).join('');
+}
+
+function selecionarCategoria(cat) {
+  catSelecionada = cat;
+  renderizarCategorias();
+  renderizarProdutos();
+}
+
+function renderizarProdutos() {
+  const grid = document.getElementById('gridProdutos');
+  if (!grid) return;
+  let lista = DB.produtos || [];
+  if (catSelecionada && catSelecionada !== 'todas') {
+    lista = lista.filter(p => p.categoria === catSelecionada);
+  }
+  if (termoBusca) {
+    const t = termoBusca.toLowerCase();
+    lista = lista.filter(p =>
+      (p.nome || '').toLowerCase().includes(t) ||
+      (p.marca || '').toLowerCase().includes(t) ||
+      (p.categoria || '').toLowerCase().includes(t)
+    );
+  }
+
+  const badge = document.getElementById('totalProdsBadge');
+  if (badge) badge.textContent = `(${lista.length} itens)`;
+
+  if (!lista.length) {
+    grid.innerHTML = '<p style="grid-column:1/-1;color:var(--cinza-texto);padding:20px 0">Nenhum produto encontrado.</p>';
+    return;
+  }
+
+  grid.innerHTML = lista.map(p => {
+    const temPromo = p.precoPromocional && Number(p.precoPromocional) > 0 && Number(p.precoPromocional) < Number(p.preco);
+    const precoFinal = temPromo ? p.precoPromocional : p.preco;
+    const img = p.imagem || 'https://via.placeholder.com/300x300?text=Produto';
+    const estoque = Number(p.estoque || 0);
+    let classeEstoque = '';
+    let txtEstoque = `${estoque} em estoque`;
+    if (estoque === 0) { classeEstoque = 'zero'; txtEstoque = 'Sem estoque'; }
+    else if (estoque < 10) { classeEstoque = 'baixo'; txtEstoque = `${estoque} restantes`; }
+
+    return `
+      <div class="card-prod">
+        <div class="card-prod-img" onclick="abrirModalFoto('${esc(img)}')">
+          <img src="${esc(img)}" alt="${esc(p.nome)}" loading="lazy">
+        </div>
+        <div class="card-prod-body">
+          <div class="prod-marca">${esc(p.marca || '')}</div>
+          <div class="prod-nome">${esc(p.nome || '')}</div>
+          <div class="prod-estoque ${classeEstoque}">${txtEstoque}</div>
+          <div class="prod-preco-row">
+            ${temPromo ? `<div class="prod-preco-antigo">${moeda(p.preco)}</div>` : ''}
+            <div class="prod-preco">${moeda(precoFinal)}</div>
+            ${p.precoPix ? `<div class="prod-pix">PIX: ${moeda(p.precoPix)}</div>` : ''}
+          </div>
+          <div class="prod-qtd-row">
+            <input type="number" class="input-qtd" id="qtd_${esc(p.id)}" value="1" min="1" max="${Math.max(1, estoque)}">
+            <button class="btn-add-lista" onclick="adicionarProdutoNaLista('${esc(p.id)}')">＋ Add</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderizarInfoDeposito() {
+  const cont = document.getElementById('infoDeposito');
+  if (!cont) return;
+  const l = DB.loja || {};
+  cont.innerHTML = `
+    <div class="info-item">
+      <div class="info-icon">📍</div>
+      <div><b>Endereço</b><br>${esc(l.endereco || '')}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">🕐</div>
+      <div><b>Horário</b><br>${esc(l.horario || '')}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">📞</div>
+      <div><b>Telefone / WhatsApp</b><br>${esc(l.telefone || '')}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">🚚</div>
+      <div><b>Entrega</b><br>Consulte a taxa para sua região pelo WhatsApp.</div>
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   LISTA DE ORÇAMENTO
+   ========================================================================== */
+function adicionarProdutoNaLista(prodId) {
+  const p = (DB.produtos || []).find(x => x.id === prodId);
+  if (!p) return;
+  const inputQtd = document.getElementById('qtd_' + prodId);
+  let qtd = Number(inputQtd?.value || 1);
+  if (qtd < 1) qtd = 1;
+  const estoque = Number(p.estoque || 0);
+  if (estoque > 0 && qtd > estoque) qtd = estoque;
+
+  const key = 'prod_' + prodId;
+  if (MINHA_LISTA[key]) {
+    MINHA_LISTA[key].qtd += qtd;
+  } else {
+    MINHA_LISTA[key] = {
+      tipo: 'produto',
+      id: prodId,
+      nome: p.nome,
+      marca: p.marca || '',
+      unidade: p.unidade || 'un',
+      preco: p.precoPromocional && p.precoPromocional > 0 ? p.precoPromocional : p.preco,
+      qtd: qtd,
+      imagem: p.imagem || ''
+    };
+  }
+  salvarListaLocal();
+  atualizarContadores();
+  renderizarGavetaLista();
+  toast(`"${p.nome}" adicionado à lista!`);
+}
+
+function adicionarOfertaNaLista(prodId) {
+  const p = (DB.produtos || []).find(x => x.id === prodId);
+  if (p) { adicionarProdutoNaLista(prodId); return; }
+  const o = (DB.ofertas || []).find(x => x.id === prodId);
+  if (!o) return;
+  const key = 'oferta_' + prodId;
+  if (MINHA_LISTA[key]) {
+    MINHA_LISTA[key].qtd += 1;
+  } else {
+    MINHA_LISTA[key] = {
+      tipo: 'oferta',
+      id: prodId,
+      nome: o.nome,
+      marca: 'Oferta',
+      unidade: 'un',
+      preco: o.precoPromocional || o.precoNormal,
+      qtd: 1,
+      imagem: o.imagem || ''
+    };
+  }
+  salvarListaLocal();
+  atualizarContadores();
+  renderizarGavetaLista();
+  toast(`"${o.nome}" adicionado à lista!`);
+}
+
+function atualizarContadores() {
+  const total = Object.values(MINHA_LISTA).reduce((s, i) => s + (i.qtd || 0), 0);
+  const el1 = document.getElementById('countListaHeader');
+  const el2 = document.getElementById('countHeroLista');
+  const el3 = document.getElementById('countBarMobile');
+  if (el1) el1.textContent = total;
+  if (el2) el2.textContent = total;
+  if (el3) el3.textContent = total;
+  const totalBox = document.getElementById('totalEstimadoGaveta');
+  const subtotalPix = document.getElementById('subtotalPixGaveta');
+  const valor = Object.values(MINHA_LISTA).reduce((s, i) => s + (i.preco * i.qtd), 0);
+  if (totalBox) totalBox.textContent = moeda(valor);
+  if (subtotalPix) subtotalPix.textContent = `Total estimado no PIX: ${moeda(valor * 0.95)}`;
+}
+
+function renderizarGavetaLista() {
+  const corpo = document.getElementById('corpoGavetaLista');
+  if (!corpo) return;
+  const itens = Object.entries(MINHA_LISTA);
+  if (!itens.length) {
+    corpo.innerHTML = '<p style="color:var(--cinza-texto);text-align:center;padding:20px 0">Sua lista está vazia.</p>';
+    return;
+  }
+  corpo.innerHTML = itens.map(([key, item]) => `
+    <div class="item-lista">
+      <img src="${esc(item.imagem || 'https://via.placeholder.com/80')}" style="width:60px;height:60px;object-fit:cover;border-radius:6px">
+      <div class="item-lista-info">
+        <div class="item-lista-nome">${esc(item.nome)}</div>
+        <div class="item-lista-preco">${item.qtd} ${esc(item.unidade)} × ${moeda(item.preco)} = <b>${moeda(item.qtd * item.preco)}</b></div>
+      </div>
+      <button class="btn-acao btn-excluir" onclick="removerDaLista('${key}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function removerDaLista(key) {
+  delete MINHA_LISTA[key];
+  salvarListaLocal();
+  atualizarContadores();
+  renderizarGavetaLista();
 }
 
 function abrirGavetaLista() {
+  renderizarGavetaLista();
   document.getElementById('gavetaLista')?.classList.add('aberto');
   document.getElementById('fundoGaveta')?.classList.add('aberto');
 }
@@ -626,41 +1172,99 @@ function fecharGavetaLista() {
   document.getElementById('fundoGaveta')?.classList.remove('aberto');
 }
 
-function toggleChat() {
-  const janela = document.getElementById('chatJanela');
-  if (janela) {
-    const aberto = janela.classList.toggle('aberto');
-    if (aberto) {
-      document.getElementById('chatInput')?.focus();
-    }
+function limparListaCompleta() {
+  if (!confirm('Deseja esvaziar toda a lista?')) return;
+  MINHA_LISTA = {};
+  salvarListaLocal();
+  atualizarContadores();
+  renderizarGavetaLista();
+  toast('Lista esvaziada.');
+}
+
+/* ==========================================================================
+   WHATSAPP
+   ========================================================================== */
+function enviarListaWhatsDirect() {
+  const l = DB.loja || {};
+  const fone = (l.whatsapp || '5511999998888').replace(/\D/g, '');
+  const itens = Object.values(MINHA_LISTA);
+
+  let msg = `*Olá, ${l.nome || 'Casa & Obra'}!* 👋\n\nGostaria de um orçamento para os seguintes itens:\n\n`;
+
+  if (itens.length) {
+    itens.forEach((item, i) => {
+      msg += `*${i + 1}. ${item.nome}*`;
+      if (item.marca) msg += ` (${item.marca})`;
+      msg += `\n   Quantidade: ${item.qtd} ${item.unidade || 'un'}\n   Preço unit.: ${moeda(item.preco)}\n   Subtotal: ${moeda(item.qtd * item.preco)}\n\n`;
+    });
+    const total = itens.reduce((s, i) => s + i.preco * i.qtd, 0);
+    msg += `*Total estimado: ${moeda(total)}*\n`;
+    msg += `*Total no PIX: ${moeda(total * 0.95)}*\n\n`;
+  } else {
+    msg += `_Ainda não selecionei itens, mas gostaria de ajuda com um orçamento._\n\n`;
   }
+
+  msg += `Aguardo o retorno. Obrigado!`;
+
+  const url = `https://wa.me/${fone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+/* ==========================================================================
+   MODAL FOTO
+   ========================================================================== */
+function abrirModalFoto(url) {
+  const modal = document.getElementById('modalFoto');
+  const img = document.getElementById('imgModalExpandida');
+  if (!modal || !img) return;
+  img.src = url;
+  modal.classList.add('aberto');
+}
+
+function fecharModalFoto() {
+  document.getElementById('modalFoto')?.classList.remove('aberto');
+}
+
+/* ==========================================================================
+   BUSCA / FILTRO
+   ========================================================================== */
+function filtrarProdutos() {
+  const input = document.getElementById('buscaInput');
+  termoBusca = input?.value?.trim() || '';
+  renderizarProdutos();
+}
+
+function rolarParaCatalogo() {
+  document.getElementById('secCatalogo')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function irParaTopo() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+/* ==========================================================================
+   CHAT
+   ========================================================================== */
+function toggleChat() {
+  const j = document.getElementById('chatJanela');
+  if (!j) return;
+  const aberto = j.classList.toggle('aberto');
+  if (aberto) document.getElementById('chatInput')?.focus();
 }
 
 function enviarMsgChat() {
   const input = document.getElementById('chatInput');
   const corpo = document.getElementById('chatCorpo');
   if (!input || !corpo || !input.value.trim()) return;
-
   const txt = esc(input.value.trim());
   input.value = '';
-
   corpo.innerHTML += `<div class="chat-msg eu">${txt}</div>`;
   corpo.scrollTop = corpo.scrollHeight;
-
   setTimeout(() => {
     let resposta = "Entendido! Posso te ajudar a calcular a quantidade de materiais ou adicionar itens à sua lista de orçamento.";
     const t = txt.toLowerCase();
-
-    if (t.includes('piso') || t.includes('m²')) {
-      resposta = "Para calcular pisos e revestimentos, adicione sempre 10% a mais para recortes e perdas. Me diga quantos metros quadrados você tem que te indico as melhores opções!";
-    } else if (t.includes('tinta')) {
-      resposta = "Uma lata de 18L de tinta rende em média de 70m² a 275m² por demão, dependendo da superfície. Geralmente indicamos de 2 a 3 demãos.";
-    } else if (t.includes('entrega')) {
-      resposta = "Sim! Realizamos entregas rápidas na região. O valor do frete varia de acordo com a distância e o volume da carga.";
-    } else if (t.includes('horário') || t.includes('funcionamento')) {
-      resposta = "Funcionamos de Segunda a Sexta das 07:00 às 18:00 e Sábado das 07:00 às 13:00.";
-    }
-
+    if (t.includes('piso') || t.includes('m²')) resposta = "Para calcular pisos e revestimentos, adicione sempre 10% a mais para recortes e perdas. Me diga quantos metros quadrados você tem!";
+    else if (t.includes('tinta')) resposta = "Uma lata de 18L rende em média de 70m² a 275m² por demão, dependendo da superfície. Geralmente indicamos 2 a 3 demãos.";
+    else if (t.includes('entrega')) resposta = "Sim! Realizamos entregas rápidas na região. O valor do frete varia conforme distância e volume.";
+    else if (t.includes('horário') || t.includes('funcionamento')) resposta = "Funcionamos de Segunda a Sexta das 07:00 às 18:00 e Sábado das 07:00 às 13:00.";
     corpo.innerHTML += `<div class="chat-msg bot">${resposta}</div>`;
     corpo.scrollTop = corpo.scrollHeight;
   }, 600);
@@ -668,22 +1272,12 @@ function enviarMsgChat() {
 
 function sugestaoChat(texto) {
   const input = document.getElementById('chatInput');
-  if (input) {
-    input.value = texto;
-    enviarMsgChat();
-  }
+  if (input) { input.value = texto; enviarMsgChat(); }
 }
 
-function fecharModalFoto() {
-  document.getElementById('modalFoto')?.classList.remove('aberto');
-}
-
-function enviarListaWhatsDirect() {
-  const l = DB.loja || {};
-  const fone = l.whatsapp || '5511999998888';
-  window.open(`https://wa.me/${fone}?text=Olá,%20gostaria%20de%20um%20orçamento%20para%20minha%20obra.`, '_blank');
-}
-
+/* ==========================================================================
+   ADMIN — LOGIN / NAVEGAÇÃO (com Supabase Auth + fallback local)
+   ========================================================================== */
 function abrirAdmin() {
   document.getElementById('lojaView').style.display = 'none';
   document.getElementById('adminView').classList.add('aberto');
@@ -692,22 +1286,65 @@ function abrirAdmin() {
 function fecharAdmin() {
   document.getElementById('adminView').classList.remove('aberto');
   document.getElementById('lojaView').style.display = 'block';
+  renderizarLoja();
 }
 
-function autenticarAdmin() {
-  const senha = document.getElementById('admSenhaInput')?.value;
-  if (senha === ADMIN_SENHA) {
-    document.getElementById('admLoginView').style.display = 'none';
-    document.getElementById('admPainelView').style.display = 'block';
-    toast('Login efetuado com sucesso!');
-  } else {
-    toast('Senha incorreta.');
+async function autenticarAdmin() {
+  const email = document.getElementById('admEmailInput')?.value?.trim() || '';
+  const senha = document.getElementById('admSenhaInput')?.value || '';
+  const btn = document.getElementById('admBtnEntrar');
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
+
+  if (window.supabaseClient && email) {
+    try {
+      const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+        email,
+        password: senha
+      });
+
+      if (!error && data?.user) {
+        window.__adminUser = data.user;
+        entrarNoPainelAdmin();
+        return;
+      }
+    } catch (e) {
+      console.warn('Falha no Supabase Auth, tentando fallback local.', e);
+    }
   }
+
+  if (senha === ADMIN_SENHA) {
+    window.__adminUser = { local: true };
+    entrarNoPainelAdmin();
+    return;
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Entrar no Painel'; }
+  toast('E-mail ou senha incorretos.');
 }
 
-function sairAdmin() {
+function entrarNoPainelAdmin() {
+  const btn = document.getElementById('admBtnEntrar');
+  if (btn) { btn.disabled = false; btn.textContent = 'Entrar no Painel'; }
+
+  document.getElementById('admLoginView').style.display = 'none';
+  document.getElementById('admPainelView').style.display = 'block';
+  setTabAdmin('produtos');
+  toast('Login efetuado com sucesso!');
+}
+
+async function sairAdmin() {
+  try {
+    if (window.supabaseClient && window.__adminUser && !window.__adminUser.local) {
+      await window.supabaseClient.auth.signOut();
+    }
+  } catch (e) { /* ignora */ }
+
+  window.__adminUser = null;
   document.getElementById('admLoginView').style.display = 'block';
   document.getElementById('admPainelView').style.display = 'none';
+  const senhaInput = document.getElementById('admSenhaInput');
+  if (senhaInput) senhaInput.value = '';
   fecharAdmin();
 }
 
@@ -716,27 +1353,685 @@ function setTabAdmin(aba) {
   document.querySelectorAll('.adm-tab-btn').forEach(btn => {
     btn.classList.toggle('ativa', btn.dataset.aba === aba);
   });
-  // Aqui você pode renderizar o conteúdo da aba do painel administrativo
+  renderizarAbaAdmin();
 }
 
-function filtrarProdutos() {
-  // Lógica de filtro por barra de busca
+/* ==========================================================================
+   ADMIN — RENDERIZAÇÃO DAS ABAS
+   ========================================================================== */
+function renderizarAbaAdmin() {
+  const cont = document.getElementById('admConteudoAba');
+  if (!cont) return;
+  if (adminAbaAtiva === 'produtos') cont.innerHTML = htmlAbaProdutos();
+  else if (adminAbaAtiva === 'ofertas') cont.innerHTML = htmlAbaOfertas();
+  else if (adminAbaAtiva === 'banners') cont.innerHTML = htmlAbaBanners();
+  else if (adminAbaAtiva === 'loja') cont.innerHTML = htmlAbaLoja();
+  else if (adminAbaAtiva === 'aparencia') cont.innerHTML = htmlAbaAparencia();
+  if (adminAbaAtiva === 'aparencia') montarOrdemSecoes();
 }
 
-function limparListaCompleta() {
-  MINHA_LISTA = {};
-  toast('Lista esvaziada.');
-  fecharGavetaLista();
+function htmlAbaProdutos() {
+  const cats = DB.categorias || [];
+  const editando = editandoProdutoId ? DB.produtos.find(p => p.id === editandoProdutoId) : null;
+  return `
+    <div class="card-adm">
+      <h3>${editando ? '✏️ Editar Produto' : '➕ Cadastrar Produto'}</h3>
+      <input type="hidden" id="prodId" value="${editando?.id || ''}">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome do produto *</label>
+          <input type="text" id="prodNome" value="${esc(editando?.nome || '')}" placeholder="Ex: Cimento CP-II 50kg">
+        </div>
+        <div class="form-group">
+          <label>Marca</label>
+          <input type="text" id="prodMarca" value="${esc(editando?.marca || '')}" placeholder="Ex: Votorantim">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="prodCategoria">
+            ${cats.map(c => `<option value="${esc(c)}" ${editando?.categoria === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Unidade</label>
+          <input type="text" id="prodUnidade" value="${esc(editando?.unidade || 'unidade')}" placeholder="saco 50kg, m², unidade...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Preço normal (R$)</label>
+          <input type="number" step="0.01" id="prodPreco" value="${editando?.preco ?? ''}" placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label>Preço promocional (R$)</label>
+          <input type="number" step="0.01" id="prodPrecoPromo" value="${editando?.precoPromocional ?? ''}" placeholder="Opcional">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Preço no PIX (R$)</label>
+          <input type="number" step="0.01" id="prodPrecoPix" value="${editando?.precoPix ?? ''}" placeholder="Opcional">
+        </div>
+        <div class="form-group">
+          <label>Estoque</label>
+          <input type="number" id="prodEstoque" value="${editando?.estoque ?? 0}" placeholder="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="prodDescricao" rows="2" placeholder="Detalhes do produto...">${esc(editando?.descricao || '')}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Imagem do produto</label>
+        <div class="upload-preview" onclick="document.getElementById('prodImagemFile').click()">
+          ${editando?.imagem ? `<img id="prodImgPreview" src="${esc(editando.imagem)}">` : `<span id="prodImgPreviewTxt">📷 Clique para escolher ou tirar foto</span><img id="prodImgPreview" style="display:none">`}
+        </div>
+        <input type="file" id="prodImagemFile" accept="image/*" style="display:none" onchange="uploadProdImagem(event)">
+        <input type="hidden" id="prodImagemUrl" value="${esc(editando?.imagem || '')}">
+        <input type="text" id="prodImagemUrlManual" value="${esc(editando?.imagem || '')}" placeholder="Ou cole a URL da imagem" oninput="document.getElementById('prodImagemUrl').value=this.value;previewProdUrl(this.value)">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-amarelo" onclick="salvarProduto()">${editando ? '💾 Atualizar' : '💾 Salvar Produto'}</button>
+        ${editando ? '<button class="btn btn-outline" onclick="cancelarEdicaoProduto()">Cancelar</button>' : ''}
+      </div>
+    </div>
+
+    <div class="card-adm">
+      <h3>📦 Produtos cadastrados (${(DB.produtos || []).length})</h3>
+      <div style="overflow-x:auto">
+        <table class="tabela-adm">
+          <thead><tr><th>Img</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Ações</th></tr></thead>
+          <tbody>
+            ${(DB.produtos || []).map(p => `
+              <tr>
+                <td><img src="${esc(p.imagem || '')}" alt=""></td>
+                <td><b>${esc(p.nome)}</b><br><small>${esc(p.marca || '')}</small></td>
+                <td>${esc(p.categoria || '')}</td>
+                <td>${moeda(p.precoPromocional && p.precoPromocional > 0 ? p.precoPromocional : p.preco)}</td>
+                <td>${esc(p.estoque ?? 0)}</td>
+                <td>
+                  <button class="btn-acao btn-editar" onclick="editarProduto('${esc(p.id)}')">✏️</button>
+                  <button class="btn-acao btn-excluir" onclick="excluirProduto('${esc(p.id)}')">🗑️</button>
+                </td>
+              </tr>
+            `).join('') || '<tr><td colspan="6">Nenhum produto cadastrado.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
-// Inicialização automática
+async function uploadProdImagem(ev) {
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  toast('Enviando imagem...');
+  const url = await uploadFoto(file, 'produtos');
+  if (!url) return;
+  document.getElementById('prodImagemUrl').value = url;
+  document.getElementById('prodImagemUrlManual').value = url;
+  previewProdUrl(url);
+  toast('Imagem enviada!');
+}
+
+function previewProdUrl(url) {
+  const img = document.getElementById('prodImgPreview');
+  const txt = document.getElementById('prodImgPreviewTxt');
+  if (img) { img.src = url; img.style.display = 'block'; }
+  if (txt) txt.style.display = 'none';
+}
+
+function editarProduto(id) {
+  editandoProdutoId = id;
+  renderizarAbaAdmin();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cancelarEdicaoProduto() {
+  editandoProdutoId = null;
+  renderizarAbaAdmin();
+}
+
+async function salvarProduto() {
+  const nome = document.getElementById('prodNome')?.value?.trim();
+  if (!nome) { toast('Informe o nome do produto.'); return; }
+  const produto = {
+    id: document.getElementById('prodId')?.value || gerarId('p'),
+    nome,
+    marca: document.getElementById('prodMarca')?.value?.trim() || '',
+    categoria: document.getElementById('prodCategoria')?.value || 'Outros',
+    unidade: document.getElementById('prodUnidade')?.value?.trim() || 'unidade',
+    preco: Number(document.getElementById('prodPreco')?.value || 0),
+    precoPromocional: document.getElementById('prodPrecoPromo')?.value ? Number(document.getElementById('prodPrecoPromo').value) : null,
+    precoPix: document.getElementById('prodPrecoPix')?.value ? Number(document.getElementById('prodPrecoPix').value) : null,
+    estoque: Number(document.getElementById('prodEstoque')?.value || 0),
+    descricao: document.getElementById('prodDescricao')?.value?.trim() || '',
+    imagem: document.getElementById('prodImagemUrl')?.value || ''
+  };
+
+  const idx = DB.produtos.findIndex(p => p.id === produto.id);
+  if (idx >= 0) DB.produtos[idx] = produto;
+  else DB.produtos.push(produto);
+
+  salvarDBLocal();
+  await salvarProdutoSupabase(produto);
+  editandoProdutoId = null;
+  renderizarAbaAdmin();
+  renderizarProdutos();
+  toast('Produto salvo com sucesso!');
+}
+
+async function excluirProduto(id) {
+  if (!confirm('Excluir este produto?')) return;
+  DB.produtos = DB.produtos.filter(p => p.id !== id);
+  salvarDBLocal();
+  await excluirProdutoSupabase(id);
+  renderizarAbaAdmin();
+  renderizarProdutos();
+  toast('Produto excluído.');
+}
+
+function htmlAbaOfertas() {
+  const editando = editandoOfertaId ? DB.ofertas.find(o => o.id === editandoOfertaId) : null;
+  const produtos = DB.produtos || [];
+  return `
+    <div class="card-adm">
+      <h3>${editando ? '✏️ Editar Oferta' : '➕ Cadastrar Oferta'}</h3>
+      <input type="hidden" id="ofertaId" value="${editando?.id || ''}">
+      <div class="form-group">
+        <label>Título da oferta *</label>
+        <input type="text" id="ofertaNome" value="${esc(editando?.nome || '')}" placeholder="Ex: Feirão do Cimento">
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="ofertaDescricao" rows="2">${esc(editando?.descricao || '')}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Produto vinculado (opcional)</label>
+        <select id="ofertaProdutoId">
+          <option value="">— Nenhum —</option>
+          ${produtos.map(p => `<option value="${esc(p.id)}" ${editando?.produtoId === p.id ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Preço normal (R$)</label>
+          <input type="number" step="0.01" id="ofertaPrecoNormal" value="${editando?.precoNormal ?? ''}">
+        </div>
+        <div class="form-group">
+          <label>Preço promocional (R$)</label>
+          <input type="number" step="0.01" id="ofertaPrecoPromo" value="${editando?.precoPromocional ?? ''}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Imagem da oferta</label>
+        <div class="upload-preview" onclick="document.getElementById('ofertaImagemFile').click()">
+          ${editando?.imagem ? `<img id="ofertaImgPreview" src="${esc(editando.imagem)}">` : `<span id="ofertaImgPreviewTxt">📷 Clique para escolher</span><img id="ofertaImgPreview" style="display:none">`}
+        </div>
+        <input type="file" id="ofertaImagemFile" accept="image/*" style="display:none" onchange="uploadOfertaImagem(event)">
+        <input type="hidden" id="ofertaImagemUrl" value="${esc(editando?.imagem || '')}">
+        <input type="text" id="ofertaImagemUrlManual" value="${esc(editando?.imagem || '')}" placeholder="Ou cole a URL" oninput="document.getElementById('ofertaImagemUrl').value=this.value;previewOfertaUrl(this.value)">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-amarelo" onclick="salvarOferta()">${editando ? '💾 Atualizar' : '💾 Salvar Oferta'}</button>
+        ${editando ? '<button class="btn btn-outline" onclick="cancelarEdicaoOferta()">Cancelar</button>' : ''}
+      </div>
+    </div>
+
+    <div class="card-adm">
+      <h3>🔥 Ofertas cadastradas (${(DB.ofertas || []).length})</h3>
+      <div style="overflow-x:auto">
+        <table class="tabela-adm">
+          <thead><tr><th>Img</th><th>Nome</th><th>Preço promo</th><th>Ações</th></tr></thead>
+          <tbody>
+            ${(DB.ofertas || []).map(o => `
+              <tr>
+                <td><img src="${esc(o.imagem || '')}" alt=""></td>
+                <td><b>${esc(o.nome)}</b></td>
+                <td>${moeda(o.precoPromocional || o.precoNormal)}</td>
+                <td>
+                  <button class="btn-acao btn-editar" onclick="editarOferta('${esc(o.id)}')">✏️</button>
+                  <button class="btn-acao btn-excluir" onclick="excluirOferta('${esc(o.id)}')">🗑️</button>
+                </td>
+              </tr>
+            `).join('') || '<tr><td colspan="4">Nenhuma oferta cadastrada.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+async function uploadOfertaImagem(ev) {
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  toast('Enviando imagem...');
+  const url = await uploadFoto(file, 'ofertas');
+  if (!url) return;
+  document.getElementById('ofertaImagemUrl').value = url;
+  document.getElementById('ofertaImagemUrlManual').value = url;
+  previewOfertaUrl(url);
+  toast('Imagem enviada!');
+}
+
+function previewOfertaUrl(url) {
+  const img = document.getElementById('ofertaImgPreview');
+  const txt = document.getElementById('ofertaImgPreviewTxt');
+  if (img) { img.src = url; img.style.display = 'block'; }
+  if (txt) txt.style.display = 'none';
+}
+
+function editarOferta(id) { editandoOfertaId = id; renderizarAbaAdmin(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function cancelarEdicaoOferta() { editandoOfertaId = null; renderizarAbaAdmin(); }
+
+async function salvarOferta() {
+  const nome = document.getElementById('ofertaNome')?.value?.trim();
+  if (!nome) { toast('Informe o título da oferta.'); return; }
+  const oferta = {
+    id: document.getElementById('ofertaId')?.value || gerarId('off'),
+    nome,
+    descricao: document.getElementById('ofertaDescricao')?.value?.trim() || '',
+    produtoId: document.getElementById('ofertaProdutoId')?.value || '',
+    precoNormal: Number(document.getElementById('ofertaPrecoNormal')?.value || 0),
+    precoPromocional: Number(document.getElementById('ofertaPrecoPromo')?.value || 0),
+    imagem: document.getElementById('ofertaImagemUrl')?.value || ''
+  };
+  const idx = DB.ofertas.findIndex(o => o.id === oferta.id);
+  if (idx >= 0) DB.ofertas[idx] = oferta;
+  else DB.ofertas.push(oferta);
+  salvarDBLocal();
+  await salvarOfertaSupabase(oferta);
+  editandoOfertaId = null;
+  renderizarAbaAdmin();
+  renderizarOfertas();
+  toast('Oferta salva!');
+}
+
+async function excluirOferta(id) {
+  if (!confirm('Excluir esta oferta?')) return;
+  DB.ofertas = DB.ofertas.filter(o => o.id !== id);
+  salvarDBLocal();
+  await excluirOfertaSupabase(id);
+  renderizarAbaAdmin();
+  renderizarOfertas();
+  toast('Oferta excluída.');
+}
+
+function htmlAbaBanners() {
+  const editando = editandoBannerId ? DB.banners.find(b => b.id === editandoBannerId) : null;
+  return `
+    <div class="card-adm">
+      <h3>${editando ? '✏️ Editar Banner' : '➕ Cadastrar Banner'}</h3>
+      <input type="hidden" id="bannerId" value="${editando?.id || ''}">
+      <div class="form-group">
+        <label>Título do banner</label>
+        <input type="text" id="bannerTitulo" value="${esc(editando?.titulo || '')}">
+      </div>
+      <div class="form-group">
+        <label>Subtítulo</label>
+        <input type="text" id="bannerSubtitulo" value="${esc(editando?.subtitulo || '')}">
+      </div>
+      <div class="form-group">
+        <label>Imagem do banner</label>
+        <div class="upload-preview" onclick="document.getElementById('bannerImagemFile').click()">
+          ${editando?.imagem ? `<img id="bannerImgPreview" src="${esc(editando.imagem)}">` : `<span id="bannerImgPreviewTxt">📷 Clique para escolher</span><img id="bannerImgPreview" style="display:none">`}
+        </div>
+        <input type="file" id="bannerImagemFile" accept="image/*" style="display:none" onchange="uploadBannerImagem(event)">
+        <input type="hidden" id="bannerImagemUrl" value="${esc(editando?.imagem || '')}">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-amarelo" onclick="salvarBanner()">${editando ? '💾 Atualizar' : '💾 Salvar Banner'}</button>
+        ${editando ? '<button class="btn btn-outline" onclick="cancelarEdicaoBanner()">Cancelar</button>' : ''}
+      </div>
+    </div>
+    <div class="card-adm">
+      <h3>🖼️ Banners cadastrados (${(DB.banners || []).length})</h3>
+      <div style="overflow-x:auto">
+        <table class="tabela-adm">
+          <thead><tr><th>Img</th><th>Título</th><th>Ações</th></tr></thead>
+          <tbody>
+            ${(DB.banners || []).map(b => `
+              <tr>
+                <td><img src="${esc(b.imagem || '')}" alt=""></td>
+                <td><b>${esc(b.titulo || '')}</b></td>
+                <td>
+                  <button class="btn-acao btn-editar" onclick="editarBanner('${esc(b.id)}')">✏️</button>
+                  <button class="btn-acao btn-excluir" onclick="excluirBanner('${esc(b.id)}')">🗑️</button>
+                </td>
+              </tr>
+            `).join('') || '<tr><td colspan="3">Nenhum banner cadastrado.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+async function uploadBannerImagem(ev) {
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  const url = await uploadFoto(file, 'banners');
+  if (!url) return;
+  document.getElementById('bannerImagemUrl').value = url;
+  const img = document.getElementById('bannerImgPreview');
+  const txt = document.getElementById('bannerImgPreviewTxt');
+  if (img) { img.src = url; img.style.display = 'block'; }
+  if (txt) txt.style.display = 'none';
+  toast('Imagem enviada!');
+}
+
+function editarBanner(id) { editandoBannerId = id; renderizarAbaAdmin(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function cancelarEdicaoBanner() { editandoBannerId = null; renderizarAbaAdmin(); }
+
+async function salvarBanner() {
+  const banner = {
+    id: document.getElementById('bannerId')?.value || gerarId('banner'),
+    titulo: document.getElementById('bannerTitulo')?.value?.trim() || '',
+    subtitulo: document.getElementById('bannerSubtitulo')?.value?.trim() || '',
+    imagem: document.getElementById('bannerImagemUrl')?.value || ''
+  };
+  const idx = DB.banners.findIndex(b => b.id === banner.id);
+  if (idx >= 0) DB.banners[idx] = banner;
+  else DB.banners.push(banner);
+  salvarDBLocal();
+  await salvarBannerSupabase(banner);
+  editandoBannerId = null;
+  renderizarAbaAdmin();
+  toast('Banner salvo!');
+}
+
+async function excluirBanner(id) {
+  if (!confirm('Excluir este banner?')) return;
+  DB.banners = DB.banners.filter(b => b.id !== id);
+  salvarDBLocal();
+  await excluirBannerSupabase(id);
+  renderizarAbaAdmin();
+  toast('Banner excluído.');
+}
+
+function htmlAbaLoja() {
+  const l = DB.loja || {};
+  return `
+    <div class="card-adm">
+      <h3>🏪 Dados da Loja</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Nome da loja</label><input type="text" id="lojaNome" value="${esc(l.nome || '')}"></div>
+        <div class="form-group"><label>WhatsApp (só números, com DDI)</label><input type="text" id="lojaWhats" value="${esc(l.whatsapp || '')}" placeholder="5511999998888"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Telefone fixo</label><input type="text" id="lojaTelefone" value="${esc(l.telefone || '')}"></div>
+        <div class="form-group"><label>Horário de funcionamento</label><input type="text" id="lojaHorario" value="${esc(l.horario || '')}"></div>
+      </div>
+      <div class="form-group"><label>Endereço</label><input type="text" id="lojaEndereco" value="${esc(l.endereco || '')}"></div>
+      <div class="form-group"><label>Slogan</label><input type="text" id="lojaSlogan" value="${esc(l.slogan || '')}"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Título do Hero</label><input type="text" id="lojaHeroTitulo" value="${esc(l.heroTitulo || '')}"></div>
+        <div class="form-group"><label>Subtítulo do Hero</label><input type="text" id="lojaHeroSub" value="${esc(l.heroSubtitulo || '')}"></div>
+      </div>
+      <div class="form-group"><label>Texto do rodapé</label><input type="text" id="lojaRodape" value="${esc(l.rodapeTexto || '')}"></div>
+      <div class="form-group">
+        <label>Categorias (separadas por vírgula)</label>
+        <textarea id="lojaCategorias" rows="2">${esc((DB.categorias || []).join(', '))}</textarea>
+      </div>
+      <button class="btn btn-amarelo" onclick="salvarDadosLoja()">💾 Salvar Dados da Loja</button>
+    </div>
+  `;
+}
+
+async function salvarDadosLoja() {
+  DB.loja = {
+    ...DB.loja,
+    nome: document.getElementById('lojaNome')?.value?.trim() || 'Casa & Obra',
+    whatsapp: document.getElementById('lojaWhats')?.value?.trim() || '',
+    telefone: document.getElementById('lojaTelefone')?.value?.trim() || '',
+    horario: document.getElementById('lojaHorario')?.value?.trim() || '',
+    endereco: document.getElementById('lojaEndereco')?.value?.trim() || '',
+    slogan: document.getElementById('lojaSlogan')?.value?.trim() || '',
+    heroTitulo: document.getElementById('lojaHeroTitulo')?.value?.trim() || '',
+    heroSubtitulo: document.getElementById('lojaHeroSub')?.value?.trim() || '',
+    rodapeTexto: document.getElementById('lojaRodape')?.value?.trim() || ''
+  };
+  const catsTxt = document.getElementById('lojaCategorias')?.value || '';
+  DB.categorias = catsTxt.split(',').map(c => c.trim()).filter(Boolean);
+  salvarDBLocal();
+  await salvarConfigSupabase();
+  aplicarAparencia();
+  renderizarLoja();
+  renderizarAbaAdmin();
+  toast('Dados da loja salvos!');
+}
+
+function htmlAbaAparencia() {
+  const a = DB.aparencia || {};
+  return `
+    <div class="card-adm">
+      <h3>🎨 Cores</h3>
+      <div class="aparencia-grid">
+        <div class="form-group"><label>Cor primária (destaques)</label><div class="cor-input"><input type="color" id="apCorPrimaria" value="${a.corPrimaria || '#FFC400'}"><span>${a.corPrimaria || '#FFC400'}</span></div></div>
+        <div class="form-group"><label>Cor secundária (cabeçalho)</label><div class="cor-input"><input type="color" id="apCorSecundaria" value="${a.corSecundaria || '#1E232A'}"><span>${a.corSecundaria || '#1E232A'}</span></div></div>
+        <div class="form-group"><label>Cor de fundo</label><div class="cor-input"><input type="color" id="apCorFundo" value="${a.corFundo || '#F4F6F8'}"><span>${a.corFundo || '#F4F6F8'}</span></div></div>
+        <div class="form-group"><label>Cor do texto</label><div class="cor-input"><input type="color" id="apCorTexto" value="${a.corTexto || '#1E232A'}"><span>${a.corTexto || '#1E232A'}</span></div></div>
+        <div class="form-group"><label>Cor dos botões de ação</label><div class="cor-input"><input type="color" id="apCorBotoes" value="${a.corBotoes || '#25D366'}"><span>${a.corBotoes || '#25D366'}</span></div></div>
+      </div>
+    </div>
+
+    <div class="card-adm">
+      <h3>🔤 Fontes e tamanhos</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Fonte principal</label>
+          <select id="apFontePrincipal">
+            ${['-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', 'Arial, Helvetica, sans-serif', 'Georgia, serif', '"Courier New", monospace', '"Trebuchet MS", sans-serif'].map(f => `<option value="${f}" ${a.fontePrincipal === f ? 'selected' : ''}>${f.split(',')[0]}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label>Fonte dos títulos</label>
+          <select id="apFonteTitulos">
+            ${['-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', 'Arial, Helvetica, sans-serif', 'Georgia, serif', '"Trebuchet MS", sans-serif'].map(f => `<option value="${f}" ${a.fonteTitulos === f ? 'selected' : ''}>${f.split(',')[0]}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Tamanho do título de seção</label><input type="text" id="apTamTitulo" value="${esc(a.tamanhoTituloSecao || '1.35rem')}" placeholder="1.35rem"></div>
+        <div class="form-group"><label>Tamanho do preço</label><input type="text" id="apTamPreco" value="${esc(a.tamanhoPreco || '1.75rem')}" placeholder="1.75rem"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Altura das fotos de produto</label><input type="text" id="apAlturaProd" value="${esc(a.alturaImgProduto || '110px')}" placeholder="110px"></div>
+        <div class="form-group"><label>Altura das fotos de oferta</label><input type="text" id="apAlturaOferta" value="${esc(a.alturaImgOferta || '180px')}" placeholder="180px"></div>
+      </div>
+    </div>
+
+    <div class="card-adm">
+      <h3>🧩 Cabeçalho e seções</h3>
+      <div class="form-group"><label>Ícone do logo</label><input type="text" id="apLogoIcone" value="${esc(a.logoIcone || '🧱')}" placeholder="Ex: 🧱"></div>
+      <div class="form-group">
+        <label>Mostrar seções</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label><input type="checkbox" id="apMostrarHero" ${a.mostrarHero !== false ? 'checked' : ''}> Hero (destaque)</label>
+          <label><input type="checkbox" id="apMostrarOfertas" ${a.mostrarOfertas !== false ? 'checked' : ''}> Ofertas da Semana</label>
+          <label><input type="checkbox" id="apMostrarCatalogo" ${a.mostrarCatalogo !== false ? 'checked' : ''}> Categorias</label>
+          <label><input type="checkbox" id="apMostrarProdutos" ${a.mostrarProdutos !== false ? 'checked' : ''}> Catálogo de Produtos</label>
+          <label><input type="checkbox" id="apMostrarInfo" ${a.mostrarInfo !== false ? 'checked' : ''}> Informações do Depósito</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ordem das seções</label>
+        <ul class="secoes-ordem" id="listaOrdemSecoes"></ul>
+      </div>
+    </div>
+
+    <div class="card-adm">
+      <h3>👣 Rodapé</h3>
+      <div class="form-group"><label>Texto do rodapé</label><input type="text" id="apRodapeTexto" value="${esc(DB.loja?.rodapeTexto || '')}"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-preview" onclick="preVisualizarAparencia()">👁️ Pré-visualizar</button>
+      <button class="btn btn-salvar-person" onclick="salvarAparencia()">💾 Salvar Personalização</button>
+      <button class="btn btn-outline" onclick="restaurarAparenciaPadrao()">↩️ Restaurar padrão</button>
+    </div>
+  `;
+}
+
+function montarOrdemSecoes() {
+  const ul = document.getElementById('listaOrdemSecoes');
+  if (!ul) return;
+  const a = DB.aparencia || {};
+  const nomes = { ofertas: 'Ofertas da Semana', catalogo: 'Categorias', produtos: 'Catálogo de Produtos', info: 'Informações do Depósito' };
+  const ordem = a.ordemSecoes || ['ofertas', 'catalogo', 'produtos', 'info'];
+  ul.innerHTML = ordem.map((s, i) => `
+    <li>
+      <span>${nomes[s] || s}</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn-mini" onclick="moverSecao(${i}, -1)">↑</button>
+        <button class="btn-mini" onclick="moverSecao(${i}, 1)">↓</button>
+      </div>
+    </li>
+  `).join('');
+}
+
+function moverSecao(idx, dir) {
+  const a = DB.aparencia;
+  const ordem = [...(a.ordemSecoes || ['ofertas','catalogo','produtos','info'])];
+  const novo = idx + dir;
+  if (novo < 0 || novo >= ordem.length) return;
+  [ordem[idx], ordem[novo]] = [ordem[novo], ordem[idx]];
+  a.ordemSecoes = ordem;
+  montarOrdemSecoes();
+  aplicarAparencia();
+  toast('Ordem alterada. Não esqueça de salvar!');
+}
+
+function coletarAparenciaDoForm() {
+  const a = DB.aparencia || {};
+  const corPrimaria = document.getElementById('apCorPrimaria')?.value;
+  const corSecundaria = document.getElementById('apCorSecundaria')?.value;
+  const corFundo = document.getElementById('apCorFundo')?.value;
+  const corTexto = document.getElementById('apCorTexto')?.value;
+  const corBotoes = document.getElementById('apCorBotoes')?.value;
+  const fontePrincipal = document.getElementById('apFontePrincipal')?.value;
+  const fonteTitulos = document.getElementById('apFonteTitulos')?.value;
+  const tamanhoTituloSecao = document.getElementById('apTamTitulo')?.value;
+  const tamanhoPreco = document.getElementById('apTamPreco')?.value;
+  const alturaImgProduto = document.getElementById('apAlturaProd')?.value;
+  const alturaImgOferta = document.getElementById('apAlturaOferta')?.value;
+  const logoIcone = document.getElementById('apLogoIcone')?.value;
+  const mostrarHero = document.getElementById('apMostrarHero')?.checked;
+  const mostrarOfertas = document.getElementById('apMostrarOfertas')?.checked;
+  const mostrarCatalogo = document.getElementById('apMostrarCatalogo')?.checked;
+  const mostrarProdutos = document.getElementById('apMostrarProdutos')?.checked;
+  const mostrarInfo = document.getElementById('apMostrarInfo')?.checked;
+  const rodapeTexto = document.getElementById('apRodapeTexto')?.value;
+
+  return {
+    ...a,
+    corPrimaria, corSecundaria, corFundo, corTexto, corBotoes,
+    fontePrincipal, fonteTitulos, tamanhoTituloSecao, tamanhoPreco,
+    alturaImgProduto, alturaImgOferta, logoIcone,
+    mostrarHero, mostrarOfertas, mostrarCatalogo, mostrarProdutos, mostrarInfo,
+    rodapeTexto
+  };
+}
+
+function preVisualizarAparencia() {
+  const nova = coletarAparenciaDoForm();
+  DB.aparencia = { ...DB.aparencia, ...nova };
+  aplicarAparencia();
+  renderizarLoja();
+  toast('Pré-visualização aplicada. Salve para publicar.');
+}
+
+async function salvarAparencia() {
+  const nova = coletarAparenciaDoForm();
+  DB.aparencia = { ...DB.aparencia, ...nova };
+  if (DB.loja) DB.loja.rodapeTexto = nova.rodapeTexto || DB.loja.rodapeTexto;
+  salvarDBLocal();
+  await salvarConfigSupabase();
+  aplicarAparencia();
+  renderizarLoja();
+  renderizarAbaAdmin();
+  toast('Personalização salva com sucesso!');
+}
+
+function restaurarAparenciaPadrao() {
+  if (!confirm('Restaurar a aparência padrão?')) return;
+  DB.aparencia = seedDB().aparencia;
+  salvarDBLocal();
+  aplicarAparencia();
+  renderizarLoja();
+  renderizarAbaAdmin();
+  toast('Aparência restaurada.');
+}
+
+/* ==========================================================================
+   INICIALIZAÇÃO
+   ========================================================================== */
 window.addEventListener('supabase-ready', () => {
   carregarDB();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  carregarDB();
+  atualizarContadores();
+
+  if (window.supabaseClient) {
+    try {
+      const { data } = await window.supabaseClient.auth.getSession();
+      if (data?.session?.user) {
+        window.__adminUser = data.session.user;
+      }
+    } catch (e) { /* ignora */ }
+  }
 });
 
 if (window.supabaseReady) {
   carregarDB();
 }
+
+/* Expõe funções globais */
+window.irParaTopo = irParaTopo;
+window.rolarParaCatalogo = rolarParaCatalogo;
+window.abrirGavetaLista = abrirGavetaLista;
+window.fecharGavetaLista = fecharGavetaLista;
+window.abrirAdmin = abrirAdmin;
+window.fecharAdmin = fecharAdmin;
+window.autenticarAdmin = autenticarAdmin;
+window.entrarNoPainelAdmin = entrarNoPainelAdmin;
+window.sairAdmin = sairAdmin;
+window.setTabAdmin = setTabAdmin;
+window.filtrarProdutos = filtrarProdutos;
+window.limparListaCompleta = limparListaCompleta;
+window.enviarListaWhatsDirect = enviarListaWhatsDirect;
+window.toggleChat = toggleChat;
+window.enviarMsgChat = enviarMsgChat;
+window.sugestaoChat = sugestaoChat;
+window.fecharModalFoto = fecharModalFoto;
+window.abrirModalFoto = abrirModalFoto;
+window.adicionarProdutoNaLista = adicionarProdutoNaLista;
+window.adicionarOfertaNaLista = adicionarOfertaNaLista;
+window.removerDaLista = removerDaLista;
+window.salvarProduto = salvarProduto;
+window.excluirProduto = excluirProduto;
+window.editarProduto = editarProduto;
+window.cancelarEdicaoProduto = cancelarEdicaoProduto;
+window.uploadProdImagem = uploadProdImagem;
+window.salvarOferta = salvarOferta;
+window.excluirOferta = excluirOferta;
+window.editarOferta = editarOferta;
+window.cancelarEdicaoOferta = cancelarEdicaoOferta;
+window.uploadOfertaImagem = uploadOfertaImagem;
+window.salvarBanner = salvarBanner;
+window.excluirBanner = excluirBanner;
+window.editarBanner = editarBanner;
+window.cancelarEdicaoBanner = cancelarEdicaoBanner;
+window.uploadBannerImagem = uploadBannerImagem;
+window.salvarDadosLoja = salvarDadosLoja;
+window.preVisualizarAparencia = preVisualizarAparencia;
+window.salvarAparencia = salvarAparencia;
+window.restaurarAparenciaPadrao = restaurarAparenciaPadrao;
+window.moverSecao = moverSecao;
+window.selecionarCategoria = selecionarCategoria;
+window.reordenarSecoes = reordenarSecoes;
 </script>
 </body>
 </html>

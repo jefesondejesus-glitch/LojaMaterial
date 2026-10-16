@@ -432,12 +432,12 @@
     <div class="login-box">
       <h2 style="font-weight:900;margin-bottom:6px;font-size:1.35rem">🔒 Gestão do Depósito</h2>
       <p style="font-size:0.88rem;color:var(--cinza-texto);margin-bottom:18px">
-        Entre com seu e-mail e senha de administrador.
+        Entre com seu login e senha de gestor.
       </p>
 
       <div class="form-group">
-        <label>E-mail</label>
-        <input type="email" id="admEmailInput" placeholder="admin@casaobra.com" autocomplete="username">
+        <label>Login</label>
+        <input type="text" id="admEmailInput" placeholder="missiato" autocomplete="username">
       </div>
 
       <div class="form-group">
@@ -455,7 +455,7 @@
       </button>
 
       <p style="font-size:0.75rem;color:var(--cinza-texto);margin-top:14px;text-align:center">
-        Se ainda não tiver usuário no Supabase, use a senha local: <b>v8admin</b>
+        Acesso restrito ao gestor do depósito.
       </p>
     </div>
   </div>
@@ -485,8 +485,10 @@
    ========================================================================== */
 const DB_KEY = 'casaobra_deposito_db_v2';
 const LISTA_KEY = 'casaobra_minha_lista_v1';
-const ADMIN_SENHA = 'v8admin';
-const ADMIN_EMAIL_PADRAO = 'admin@casaobra.com';
+
+/* 🔐 Credenciais fixas do gestor do depósito */
+const ADMIN_LOGIN = 'missiato';
+const ADMIN_SENHA = '5116170';
 
 let DB = { loja: {}, categorias: [], ofertas: [], produtos: [], banners: [], aparencia: {} };
 let MINHA_LISTA = {};
@@ -1276,7 +1278,7 @@ function sugestaoChat(texto) {
 }
 
 /* ==========================================================================
-   ADMIN — LOGIN / NAVEGAÇÃO (com Supabase Auth + fallback local)
+   ADMIN — LOGIN / NAVEGAÇÃO (login e senha fixos, sem Supabase Auth)
    ========================================================================== */
 function abrirAdmin() {
   document.getElementById('lojaView').style.display = 'none';
@@ -1289,38 +1291,19 @@ function fecharAdmin() {
   renderizarLoja();
 }
 
-async function autenticarAdmin() {
-  const email = document.getElementById('admEmailInput')?.value?.trim() || '';
+function autenticarAdmin() {
+  const login = document.getElementById('admEmailInput')?.value?.trim() || '';
   const senha = document.getElementById('admSenhaInput')?.value || '';
   const btn = document.getElementById('admBtnEntrar');
 
-  if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
-
-  if (window.supabaseClient && email) {
-    try {
-      const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-        email,
-        password: senha
-      });
-
-      if (!error && data?.user) {
-        window.__adminUser = data.user;
-        entrarNoPainelAdmin();
-        return;
-      }
-    } catch (e) {
-      console.warn('Falha no Supabase Auth, tentando fallback local.', e);
-    }
-  }
-
-  if (senha === ADMIN_SENHA) {
-    window.__adminUser = { local: true };
+  if (login === ADMIN_LOGIN && senha === ADMIN_SENHA) {
+    window.__adminUser = { local: true, login };
     entrarNoPainelAdmin();
     return;
   }
 
   if (btn) { btn.disabled = false; btn.textContent = 'Entrar no Painel'; }
-  toast('E-mail ou senha incorretos.');
+  toast('Login ou senha incorretos.');
 }
 
 function entrarNoPainelAdmin() {
@@ -1333,18 +1316,14 @@ function entrarNoPainelAdmin() {
   toast('Login efetuado com sucesso!');
 }
 
-async function sairAdmin() {
-  try {
-    if (window.supabaseClient && window.__adminUser && !window.__adminUser.local) {
-      await window.supabaseClient.auth.signOut();
-    }
-  } catch (e) { /* ignora */ }
-
+function sairAdmin() {
   window.__adminUser = null;
   document.getElementById('admLoginView').style.display = 'block';
   document.getElementById('admPainelView').style.display = 'none';
   const senhaInput = document.getElementById('admSenhaInput');
   if (senhaInput) senhaInput.value = '';
+  const loginInput = document.getElementById('admEmailInput');
+  if (loginInput) loginInput.value = '';
   fecharAdmin();
 }
 
@@ -1970,18 +1949,9 @@ window.addEventListener('supabase-ready', () => {
   carregarDB();
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   carregarDB();
   atualizarContadores();
-
-  if (window.supabaseClient) {
-    try {
-      const { data } = await window.supabaseClient.auth.getSession();
-      if (data?.session?.user) {
-        window.__adminUser = data.session.user;
-      }
-    } catch (e) { /* ignora */ }
-  }
 });
 
 if (window.supabaseReady) {

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <circle cx="50" cy="50" r="48" fill="#FFC400" />
   <text x="50" y="58" font-family="sans-serif" font-size="52" font-weight="300" text-anchor="middle" dominant-baseline="middle" fill="#2D343E" opacity="0.18">&</text>
-  <text x="50" y="52" font-family="sans-serif" font-size="32" font-weight="800" letter-spacing="4" text-anchor="middle" dominant-baseline="middle" fill="#2D343E">C O</text>
+  <text x="50" y="52" font-family="sans-serif" font-size="32" font-weight="800" letter-spacing="4" text-anchor="middle" dominant-baseline="middle" fill="#2D343E">C&ampO</text>
 </svg>

@@ -11,7 +11,7 @@
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     const supabaseUrl = 'https://efpvtizxvplqoehohstc.supabase.co';
-    const supabasyKey = "sb_publishable_X2lciUJy5MdDOrTafCzwIg_zVfZ4MpF
+    const supabaseKey = "sb_publishable_X2lciUJy5MdDOrTafCzwIg_zVfZ4MpF";
 
     try {
       window.supabaseClient = createClient(supabaseUrl, supabaseKey);
@@ -429,25 +429,22 @@
 <!-- ADMIN -->
 <div id="adminView">
   <div id="admLoginView">
-    <div class="login-box">
+    <!-- ETAPA 1: enviar código OTP -->
+    <div class="login-box" id="admEtapaEmail">
       <h2 style="font-weight:900;margin-bottom:6px;font-size:1.35rem">🔒 Gestão do Depósito</h2>
       <p style="font-size:0.88rem;color:var(--cinza-texto);margin-bottom:18px">
-        Entre com seu login e senha de gestor.
+        Informe seu e-mail de gestor. Enviaremos um código de verificação.
       </p>
 
       <div class="form-group">
-        <label>Login</label>
-        <input type="text" id="admEmailInput" placeholder="missiato" autocomplete="username">
+        <label>E-mail do gestor</label>
+        <input type="email" id="admEmailInput" placeholder="gestor@exemplo.com"
+               autocomplete="email"
+               onkeydown="if(event.key==='Enter')enviarCodigoOTP()">
       </div>
 
-      <div class="form-group">
-        <label>Senha</label>
-        <input type="password" id="admSenhaInput" placeholder="Senha..." autocomplete="current-password"
-               onkeydown="if(event.key==='Enter')autenticarAdmin()">
-      </div>
-
-      <button class="btn btn-amarelo" style="width:100%" onclick="autenticarAdmin()" id="admBtnEntrar">
-        Entrar no Painel
+      <button class="btn btn-amarelo" style="width:100%" onclick="enviarCodigoOTP()" id="admBtnEnviar">
+        Enviar código
       </button>
 
       <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px" onclick="fecharAdmin()">
@@ -457,6 +454,33 @@
       <p style="font-size:0.75rem;color:var(--cinza-texto);margin-top:14px;text-align:center">
         Acesso restrito ao gestor do depósito.
       </p>
+    </div>
+
+    <!-- ETAPA 2: verificar código OTP -->
+    <div class="login-box" id="admEtapaOTP" style="display:none">
+      <h2 style="font-weight:900;margin-bottom:6px;font-size:1.35rem">📩 Verificar código</h2>
+      <p style="font-size:0.88rem;color:var(--cinza-texto);margin-bottom:18px">
+        Digite o código de 6 dígitos enviado para <b id="admEmailMostrado"></b>.
+      </p>
+
+      <div class="form-group">
+        <label>Código de verificação</label>
+        <input type="text" id="admCampoOTP" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+               placeholder="000000"
+               style="text-align:center;letter-spacing:8px;font-size:1.5rem;font-weight:800"
+               autocomplete="one-time-code"
+               onkeydown="if(event.key==='Enter')verificarCodigoOTP()">
+      </div>
+
+      <button class="btn btn-amarelo" style="width:100%" onclick="verificarCodigoOTP()" id="admBtnVerificar">
+        Verificar código
+      </button>
+
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px" onclick="voltarEtapaEmail()">
+        ← Alterar e-mail
+      </button>
+
+      <p id="admMensagemOTP" style="font-size:0.85rem;margin-top:14px;text-align:center"></p>
     </div>
   </div>
 
@@ -486,10 +510,6 @@
 const DB_KEY = 'casaobra_deposito_db_v2';
 const LISTA_KEY = 'casaobra_minha_lista_v1';
 
-/* 🔐 Credenciais fixas do gestor do depósito */
-const ADMIN_LOGIN = 'missiato';
-const ADMIN_SENHA = '5116170';
-
 let DB = { loja: {}, categorias: [], ofertas: [], produtos: [], banners: [], aparencia: {} };
 let MINHA_LISTA = {};
 let catSelecionada = 'todas';
@@ -498,9 +518,10 @@ let termoBusca = '';
 let editandoProdutoId = null;
 let editandoOfertaId = null;
 let editandoBannerId = null;
+let loginAdmin = '';
 
 /* ==========================================================================
-   SEED (dados iniciais preservados)
+   SEED (dados iniciais)
    ========================================================================== */
 function seedDB() {
   const categorias = [
@@ -1278,11 +1299,15 @@ function sugestaoChat(texto) {
 }
 
 /* ==========================================================================
-   ADMIN — LOGIN / NAVEGAÇÃO (login e senha fixos, sem Supabase Auth)
+   ADMIN — AUTENTICAÇÃO VIA OTP (Supabase)
    ========================================================================== */
 function abrirAdmin() {
   document.getElementById('lojaView').style.display = 'none';
   document.getElementById('adminView').classList.add('aberto');
+  document.getElementById('admLoginView').style.display = 'block';
+  document.getElementById('admPainelView').style.display = 'none';
+  document.getElementById('admEtapaEmail').style.display = 'block';
+  document.getElementById('admEtapaOTP').style.display = 'none';
 }
 
 function fecharAdmin() {
@@ -1291,39 +1316,131 @@ function fecharAdmin() {
   renderizarLoja();
 }
 
-function autenticarAdmin() {
-  const login = document.getElementById('admEmailInput')?.value?.trim() || '';
-  const senha = document.getElementById('admSenhaInput')?.value || '';
-  const btn = document.getElementById('admBtnEntrar');
+/* ---------- Etapa 1: enviar OTP ---------- */
+async function enviarCodigoOTP() {
+  const btn = document.getElementById('admBtnEnviar');
+  const email = document.getElementById('admEmailInput')?.value?.trim();
 
-  if (login === ADMIN_LOGIN && senha === ADMIN_SENHA) {
-    window.__adminUser = { local: true, login };
-    entrarNoPainelAdmin();
+  if (!email) {
+    toast('Informe o e-mail do gestor.');
     return;
   }
 
-  if (btn) { btn.disabled = false; btn.textContent = 'Entrar no Painel'; }
-  toast('Login ou senha incorretos.');
+  if (!window.supabaseClient) {
+    toast('Supabase não inicializado. Tente novamente em instantes.');
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+
+  try {
+    const { error } = await window.supabaseClient.auth.signInWithOtp({
+      email: email,
+      options: {
+        shouldCreateUser: false,
+      },
+    });
+
+    if (error) {
+      toast('Erro ao enviar código: ' + error.message);
+      if (btn) { btn.disabled = false; btn.textContent = 'Enviar código'; }
+      return;
+    }
+
+    loginAdmin = email;
+    document.getElementById('admEmailMostrado').textContent = email;
+    document.getElementById('admEtapaEmail').style.display = 'none';
+    document.getElementById('admEtapaOTP').style.display = 'block';
+    document.getElementById('admCampoOTP').value = '';
+    document.getElementById('admCampoOTP').focus();
+    document.getElementById('admMensagemOTP').textContent = '';
+    toast('Código enviado! Verifique seu e-mail.');
+  } catch (err) {
+    console.error(err);
+    toast('Erro inesperado ao enviar o código.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Enviar código'; }
+  }
+}
+
+/* ---------- Etapa 2: verificar OTP ---------- */
+async function verificarCodigoOTP() {
+  const btn = document.getElementById('admBtnVerificar');
+  const msg = document.getElementById('admMensagemOTP');
+  const token = document.getElementById('admCampoOTP')?.value?.trim();
+
+  if (!token || !/^\d{6}$/.test(token)) {
+    if (msg) { msg.textContent = 'Digite um código válido de 6 dígitos.'; msg.style.color = '#d93025'; }
+    return;
+  }
+
+  if (!loginAdmin) {
+    toast('Sessão expirada. Informe o e-mail novamente.');
+    voltarEtapaEmail();
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
+  if (msg) { msg.textContent = ''; }
+
+  try {
+    const { data, error } = await window.supabaseClient.auth.verifyOtp({
+      email: loginAdmin,
+      token: token,
+      type: 'email',
+    });
+
+    if (error) {
+      if (msg) { msg.textContent = 'Código inválido ou expirado: ' + error.message; msg.style.color = '#d93025'; }
+      return;
+    }
+
+    window.__adminUser = { session: data.session, email: loginAdmin };
+    if (msg) { msg.textContent = 'Código verificado com sucesso!'; msg.style.color = '#188038'; }
+
+    setTimeout(() => {
+      entrarNoPainelAdmin();
+    }, 600);
+  } catch (err) {
+    console.error(err);
+    if (msg) { msg.textContent = 'Erro inesperado ao verificar o código.'; msg.style.color = '#d93025'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Verificar código'; }
+  }
+}
+
+function voltarEtapaEmail() {
+  document.getElementById('admEtapaEmail').style.display = 'block';
+  document.getElementById('admEtapaOTP').style.display = 'none';
+  document.getElementById('admCampoOTP').value = '';
+  const msg = document.getElementById('admMensagemOTP');
+  if (msg) msg.textContent = '';
 }
 
 function entrarNoPainelAdmin() {
-  const btn = document.getElementById('admBtnEntrar');
-  if (btn) { btn.disabled = false; btn.textContent = 'Entrar no Painel'; }
-
   document.getElementById('admLoginView').style.display = 'none';
   document.getElementById('admPainelView').style.display = 'block';
   setTabAdmin('produtos');
   toast('Login efetuado com sucesso!');
 }
 
-function sairAdmin() {
+async function sairAdmin() {
+  try {
+    if (window.supabaseClient) {
+      await window.supabaseClient.auth.signOut();
+    }
+  } catch (e) {}
   window.__adminUser = null;
+  loginAdmin = '';
+
   document.getElementById('admLoginView').style.display = 'block';
   document.getElementById('admPainelView').style.display = 'none';
-  const senhaInput = document.getElementById('admSenhaInput');
-  if (senhaInput) senhaInput.value = '';
-  const loginInput = document.getElementById('admEmailInput');
-  if (loginInput) loginInput.value = '';
+
+  const emailInput = document.getElementById('admEmailInput');
+  if (emailInput) emailInput.value = '';
+  const otpInput = document.getElementById('admCampoOTP');
+  if (otpInput) otpInput.value = '';
+
   fecharAdmin();
 }
 
@@ -1965,7 +2082,9 @@ window.abrirGavetaLista = abrirGavetaLista;
 window.fecharGavetaLista = fecharGavetaLista;
 window.abrirAdmin = abrirAdmin;
 window.fecharAdmin = fecharAdmin;
-window.autenticarAdmin = autenticarAdmin;
+window.enviarCodigoOTP = enviarCodigoOTP;
+window.verificarCodigoOTP = verificarCodigoOTP;
+window.voltarEtapaEmail = voltarEtapaEmail;
 window.entrarNoPainelAdmin = entrarNoPainelAdmin;
 window.sairAdmin = sairAdmin;
 window.setTabAdmin = setTabAdmin;
